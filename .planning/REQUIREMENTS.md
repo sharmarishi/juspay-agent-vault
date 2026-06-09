@@ -26,10 +26,10 @@ Requirements for the initial frontend-only demo. Each maps to roadmap phases.
 
 ### Controls
 
-- [ ] **CTRL-01**: User can set and edit a spending limit per card
-- [ ] **CTRL-02**: User can set and edit an MFA threshold per card (MFA required above the amount)
-- [ ] **CTRL-03**: User can toggle MFA on/off per card
-- [ ] **CTRL-04**: Card detail shows spend-against-limit progress for the current period
+- [x] **CTRL-01**: User can set and edit a spending limit per card
+- [x] **CTRL-02**: User can set and edit an MFA threshold per card (MFA required above the amount)
+- [x] **CTRL-03**: User can toggle MFA on/off per card
+- [x] **CTRL-04**: Card detail shows spend-against-limit progress for the current period
 
 ### Security
 
@@ -107,10 +107,10 @@ Populated during roadmap creation.
 | CARD-05 | Phase 2 | Complete |
 | CARD-06 | Phase 2 | Complete |
 | CARD-07 | Phase 2 | Complete |
-| CTRL-01 | Phase 3 | Pending |
-| CTRL-02 | Phase 3 | Pending |
-| CTRL-03 | Phase 3 | Pending |
-| CTRL-04 | Phase 3 | Pending |
+| CTRL-01 | Phase 3 | Complete |
+| CTRL-02 | Phase 3 | Complete |
+| CTRL-03 | Phase 3 | Complete |
+| CTRL-04 | Phase 3 | Complete |
 | SEC-01 | Phase 3 | Pending |
 | SEC-02 | Phase 3 | Pending |
 | SEC-03 | Phase 3 | Pending |

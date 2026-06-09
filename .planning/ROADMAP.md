@@ -65,7 +65,7 @@ Plans:
   5. A simulated payment is rejected with a clear reason when it would exceed the card's spending limit or the card is frozen
 **Plans**: 2 plans
 Plans:
-- [ ] 03-01-PLAN.md — Editable controls in CardDetailModal: spending limit, MFA threshold, MFA enforcement toggle wired to updateCard; live spend-vs-limit bar (CTRL-01/02/03/04)
+- [x] 03-01-PLAN.md — Editable controls in CardDetailModal: spending limit, MFA threshold, MFA enforcement toggle wired to updateCard; live spend-vs-limit bar (CTRL-01/02/03/04)
 - [ ] 03-02-PLAN.md — Simulate-payment + MFA challenge: SimulatePaymentModal (amount + app picker, frozen/over-limit rejection, blocking OTP challenge) + button in CardDetailModal (SEC-01/02/03/04)
 **UI hint**: yes
 
@@ -91,5 +91,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Shell + Data | 3/3 | Complete   | 2026-06-09 |
 | 2. Card Management | 2/3 | In Progress|  |
-| 3. Controls + Security Simulation | 0/2 | Not started | - |
+| 3. Controls + Security Simulation | 1/2 | In Progress|  |
 | 4. Transactions, Usage + Dashboard | 0/TBD | Not started | - |

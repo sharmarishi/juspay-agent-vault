@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Completed 02-card-management-03-PLAN.md
-last_updated: "2026-06-09T07:21:36.568Z"
+status: executing
+stopped_at: Completed 03-controls-security-simulation-01-PLAN.md
+last_updated: "2026-06-09T07:32:13.911Z"
 last_activity: 2026-06-09
 progress:
   total_phases: 4
   completed_phases: 2
-  total_plans: 6
-  completed_plans: 6
+  total_plans: 8
+  completed_plans: 7
   percent: 0
 ---
 
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-09)
 
 **Core value:** A user can create a use-case virtual card, set a spending limit and MFA threshold, then trigger a simulated payment that is blocked by an MFA challenge when it exceeds that threshold — proving full control over agentic payment security.
-**Current focus:** Phase 02 — card-management
+**Current focus:** Phase 03 — controls-security-simulation
 
 ## Current Position
 
-Phase: 3
-Plan: Not started
-Status: Phase complete — ready for verification
+Phase: 03 (controls-security-simulation) — EXECUTING
+Plan: 2 of 2
+Status: Ready to execute
 Last activity: 2026-06-09
 
 Progress: [░░░░░░░░░░] 0%
@@ -58,6 +58,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 02-card-management P01 | 8 | 3 tasks | 5 files |
 | Phase 02-card-management P02 | 221 | 2 tasks | 2 files |
 | Phase 02-card-management P03 | 82 | 2 tasks | 2 files |
+| Phase 03-controls-security-simulation P01 | 5 | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -86,6 +87,8 @@ Recent decisions affecting current work:
 - [Phase 02-card-management]: Physical mode stores only masked last-4 digits — raw number never persisted, respects mock security constraint
 - [Phase 02-card-management]: CardDetailModal settings (limit/MFA/status) are read-only in Phase 02 — UI notes editable in later step; Phase 03 wires inputs
 - [Phase 02-card-management]: Spend bar inline style uses card.color — Tailwind JIT cannot handle dynamic hex values from store
+- [Phase 03-controls-security-simulation]: liveCard derived from store (not prop) so edits re-render without modal close/reopen
+- [Phase 03-controls-security-simulation]: key=liveCard.id on number inputs resets controlled values when switching between cards
 
 ### Pending Todos
 
@@ -97,6 +100,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-09T07:20:37.534Z
-Stopped at: Completed 02-card-management-03-PLAN.md
+Last session: 2026-06-09T07:32:13.909Z
+Stopped at: Completed 03-controls-security-simulation-01-PLAN.md
 Resume file: None
