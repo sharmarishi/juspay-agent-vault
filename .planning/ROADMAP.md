@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Shell + Data** - ChatGPT settings modal shell, nav, co-brand, layout, seeded data, and localStorage persistence (completed 2026-06-09)
 - [ ] **Phase 2: Card Management** - Add physical cards, generate virtual cards (templates + custom), card list, card detail, freeze, and delete
 - [ ] **Phase 3: Controls + Security Simulation** - Spending limits, MFA thresholds, MFA toggle, spend-progress indicator, and the full simulate-payment + MFA-challenge flow
-- [ ] **Phase 4: Transactions, Usage + Dashboard** - Transaction histories, subscription representation, app-usage attribution, and the payments overview dashboard
+- [x] **Phase 4: Transactions, Usage + Dashboard** - Transaction histories, subscription representation, app-usage attribution, and the payments overview dashboard (completed 2026-06-09)
 
 ## Phase Details
 
@@ -82,7 +82,7 @@ Plans:
 **Plans**: 2 plans
 Plans:
 - [x] 04-01-PLAN.md — Payments IA restructure into Overview/Cards/Transactions tabs + DashboardOverview + combined TransactionsList (DASH-01/02, TXN-02/03/04)
-- [ ] 04-02-PLAN.md — Per-card app usage attribution (AppUsageBreakdown) + full per-card history in CardDetailModal (USAGE-01/02, TXN-01)
+- [x] 04-02-PLAN.md — Per-card app usage attribution (AppUsageBreakdown) + full per-card history in CardDetailModal (USAGE-01/02, TXN-01)
 **UI hint**: yes
 
 ## Progress
@@ -95,4 +95,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Shell + Data | 3/3 | Complete   | 2026-06-09 |
 | 2. Card Management | 2/3 | In Progress|  |
 | 3. Controls + Security Simulation | 1/2 | In Progress|  |
-| 4. Transactions, Usage + Dashboard | 1/2 | In Progress|  |
+| 4. Transactions, Usage + Dashboard | 2/2 | Complete   | 2026-06-09 |

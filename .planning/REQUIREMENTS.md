@@ -40,15 +40,15 @@ Requirements for the initial frontend-only demo. Each maps to roadmap phases.
 
 ### Transactions
 
-- [ ] **TXN-01**: User can view transaction history per card (date, app/merchant, amount, status)
+- [x] **TXN-01**: User can view transaction history per card (date, app/merchant, amount, status)
 - [x] **TXN-02**: User can view a combined transaction history across all cards
 - [x] **TXN-03**: Recurring subscription payments are represented and identifiable as subscriptions
 - [x] **TXN-04**: Simulated payments append to the relevant transaction histories in real time
 
 ### Usage
 
-- [ ] **USAGE-01**: User can see, per card, which ChatGPT connected apps used it (e.g. Instacart, Booking, a SaaS tool) with spend per app
-- [ ] **USAGE-02**: Each transaction is attributed to the ChatGPT app/merchant that initiated it
+- [x] **USAGE-01**: User can see, per card, which ChatGPT connected apps used it (e.g. Instacart, Booking, a SaaS tool) with spend per app
+- [x] **USAGE-02**: Each transaction is attributed to the ChatGPT app/merchant that initiated it
 
 ### Dashboard
 
@@ -115,12 +115,12 @@ Populated during roadmap creation.
 | SEC-02 | Phase 3 | Complete |
 | SEC-03 | Phase 3 | Complete |
 | SEC-04 | Phase 3 | Complete |
-| TXN-01 | Phase 4 | Pending |
+| TXN-01 | Phase 4 | Complete |
 | TXN-02 | Phase 4 | Complete |
 | TXN-03 | Phase 4 | Complete |
 | TXN-04 | Phase 4 | Complete |
-| USAGE-01 | Phase 4 | Pending |
-| USAGE-02 | Phase 4 | Pending |
+| USAGE-01 | Phase 4 | Complete |
+| USAGE-02 | Phase 4 | Complete |
 | DASH-01 | Phase 4 | Complete |
 | DASH-02 | Phase 4 | Complete |
 
