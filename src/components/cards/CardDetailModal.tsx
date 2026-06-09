@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import type { Card } from "../../data/types";
 import { Modal } from "../primitives/Modal";
 import { CardVisual } from "./CardVisual";
 import { Toggle } from "../primitives/Toggle";
 import { useVaultStore } from "../../store/useVaultStore";
+import { SimulatePaymentModal } from "./SimulatePaymentModal";
+import { JUSPAY_ACCENT } from "../../theme/tokens";
 
 interface CardDetailModalProps {
   card: Card | null;
@@ -15,6 +17,8 @@ export function CardDetailModal({ card, onClose }: CardDetailModalProps) {
   const transactions = useVaultStore((s) => s.transactions);
   const updateCard = useVaultStore((s) => s.updateCard);
   const removeCard = useVaultStore((s) => s.removeCard);
+
+  const [simulateOpen, setSimulateOpen] = useState(false);
 
   if (!card) {
     return <Modal open={false} onClose={onClose} title="Card">{null}</Modal>;
@@ -44,6 +48,17 @@ export function CardDetailModal({ card, onClose }: CardDetailModalProps) {
       {/* 1. Large card visual */}
       <div className="mb-5">
         <CardVisual card={liveCard} />
+      </div>
+
+      {/* 2a. Simulate a payment button — SEC-01 entry point */}
+      <div className="mb-4">
+        <button
+          onClick={() => setSimulateOpen(true)}
+          className="text-sm rounded-full px-4 py-1.5 text-white font-medium hover:opacity-90 transition-opacity"
+          style={{ backgroundColor: JUSPAY_ACCENT }}
+        >
+          Simulate a payment
+        </button>
       </div>
 
       {/* 2. Spend-vs-limit indicator */}
@@ -195,6 +210,13 @@ export function CardDetailModal({ card, onClose }: CardDetailModalProps) {
           Delete card
         </button>
       </div>
+
+      {/* SimulatePaymentModal — keyed to reset internal state on each open */}
+      <SimulatePaymentModal
+        cardId={simulateOpen ? liveCard.id : null}
+        onClose={() => setSimulateOpen(false)}
+        key={simulateOpen ? liveCard.id : "closed"}
+      />
     </Modal>
   );
 }
