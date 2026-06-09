@@ -86,6 +86,8 @@ export function CardDetailModal({ card, onClose, onSelectCard }: CardDetailModal
       title={liveCard.label}
       widthClass="w-[min(560px,calc(100vw-48px))]"
     >
+      {/* PERSISTENT HEADER — always visible above tab bar */}
+
       {/* 1. Large card visual */}
       <div className="mb-5">
         <CardVisual card={liveCard} />
@@ -98,8 +100,55 @@ export function CardDetailModal({ card, onClose, onSelectCard }: CardDetailModal
         </p>
       )}
 
-      {/* 1b. Virtual cards list for physical cards */}
-      {liveCard.type === "physical" && (
+      {/* 2a. Simulate a payment button — SEC-01 entry point */}
+      <div className="mb-4">
+        <button
+          onClick={() => setSimulateOpen(true)}
+          className="text-sm rounded-full px-4 py-1.5 text-white font-medium hover:opacity-90 transition-opacity"
+          style={{ backgroundColor: JUSPAY_ACCENT }}
+        >
+          Simulate a payment
+        </button>
+      </div>
+
+      {/* 2. Spend-vs-limit indicator */}
+      <div className="mb-5">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-sm font-medium text-gray-700">Spent this period</span>
+          <span className="text-sm text-gray-600">
+            ${liveCard.spent.toFixed(2)} / ${liveCard.limit.toLocaleString()}
+          </span>
+        </div>
+        <div className="bg-gray-100 rounded-full h-2 overflow-hidden">
+          <div
+            className="h-full rounded-full transition-all duration-300"
+            style={{ width: `${spendPercent}%`, backgroundColor: liveCard.color }}
+          />
+        </div>
+      </div>
+
+      {/* TAB BAR — matches PaymentsSection segmented control pattern */}
+      <div className="flex items-center gap-1 border-b border-gray-100 mb-5">
+        {visibleTabs.map(({ key, label }) => (
+          <button
+            key={key}
+            onClick={() => setTab(key)}
+            className={`text-sm px-3 py-2 -mb-px border-b-2 transition-colors ${
+              activeTab === key
+                ? "border-current font-medium"
+                : "border-transparent text-gray-500 hover:text-gray-700"
+            }`}
+            style={activeTab === key ? { color: JUSPAY_ACCENT, borderColor: JUSPAY_ACCENT } : undefined}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {/* TAB PANELS — render only the active panel */}
+
+      {/* Virtual cards tab (physical cards only) */}
+      {activeTab === "virtual" && (
         <div className="mb-5">
           <p className="text-sm font-semibold text-gray-700 mb-2">Virtual cards</p>
           {childCards.length === 0 ? (
@@ -143,171 +192,154 @@ export function CardDetailModal({ card, onClose, onSelectCard }: CardDetailModal
         </div>
       )}
 
-      {/* 2a. Simulate a payment button — SEC-01 entry point */}
-      <div className="mb-4">
-        <button
-          onClick={() => setSimulateOpen(true)}
-          className="text-sm rounded-full px-4 py-1.5 text-white font-medium hover:opacity-90 transition-opacity"
-          style={{ backgroundColor: JUSPAY_ACCENT }}
-        >
-          Simulate a payment
-        </button>
-      </div>
+      {/* Controls tab — Settings card + freeze/delete actions */}
+      {activeTab === "controls" && (
+        <>
+          {/* 3. Settings — editable */}
+          <div className="mb-5 border border-gray-100 rounded-xl overflow-hidden">
+            <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-100">
+              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                Settings
+              </span>
+            </div>
+            <div className="divide-y divide-gray-100">
+              {/* Row A: Spending limit (CTRL-01) */}
+              <div className="flex items-center justify-between px-4 py-2.5">
+                <span className="text-sm text-gray-600">Spending limit</span>
+                <div className="flex items-center gap-1">
+                  <span className="text-sm text-gray-500">$</span>
+                  <input
+                    key={liveCard.id}
+                    type="number"
+                    min={0}
+                    defaultValue={liveCard.limit}
+                    onChange={(e) => {
+                      const parsed = parseFloat(e.target.value);
+                      if (isFinite(parsed) && parsed >= 0) {
+                        updateCard(liveCard.id, { limit: parsed });
+                      }
+                    }}
+                    className="border border-gray-200 rounded-lg px-2 py-1 w-28 text-right text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
 
-      {/* 2. Spend-vs-limit indicator */}
-      <div className="mb-5">
-        <div className="flex items-center justify-between mb-1.5">
-          <span className="text-sm font-medium text-gray-700">Spent this period</span>
-          <span className="text-sm text-gray-600">
-            ${liveCard.spent.toFixed(2)} / ${liveCard.limit.toLocaleString()}
-          </span>
-        </div>
-        <div className="bg-gray-100 rounded-full h-2 overflow-hidden">
-          <div
-            className="h-full rounded-full transition-all duration-300"
-            style={{ width: `${spendPercent}%`, backgroundColor: liveCard.color }}
-          />
-        </div>
-      </div>
+              {/* Row B: MFA threshold (CTRL-02) */}
+              <div className="flex items-center justify-between px-4 py-2.5">
+                <div>
+                  <span className="text-sm text-gray-600">MFA threshold</span>
+                  <p className="text-xs text-gray-400">MFA required above this amount.</p>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-sm text-gray-500">$</span>
+                  <input
+                    key={liveCard.id}
+                    type="number"
+                    min={0}
+                    defaultValue={liveCard.mfaThreshold}
+                    onChange={(e) => {
+                      const parsed = parseFloat(e.target.value);
+                      if (isFinite(parsed) && parsed >= 0) {
+                        updateCard(liveCard.id, { mfaThreshold: parsed });
+                      }
+                    }}
+                    className="border border-gray-200 rounded-lg px-2 py-1 w-28 text-right text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
 
-      {/* 3. Settings — editable */}
-      <div className="mb-5 border border-gray-100 rounded-xl overflow-hidden">
-        <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-100">
-          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-            Settings
-          </span>
-        </div>
-        <div className="divide-y divide-gray-100">
-          {/* Row A: Spending limit (CTRL-01) */}
-          <div className="flex items-center justify-between px-4 py-2.5">
-            <span className="text-sm text-gray-600">Spending limit</span>
-            <div className="flex items-center gap-1">
-              <span className="text-sm text-gray-500">$</span>
-              <input
-                key={liveCard.id}
-                type="number"
-                min={0}
-                defaultValue={liveCard.limit}
-                onChange={(e) => {
-                  const parsed = parseFloat(e.target.value);
-                  if (isFinite(parsed) && parsed >= 0) {
-                    updateCard(liveCard.id, { limit: parsed });
-                  }
-                }}
-                className="border border-gray-200 rounded-lg px-2 py-1 w-28 text-right text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              />
+              {/* Row C: MFA enforcement (CTRL-03) */}
+              <div className="flex items-center justify-between px-4 py-2.5">
+                <span className="text-sm text-gray-600">MFA enforcement</span>
+                <Toggle
+                  checked={liveCard.mfaEnabled}
+                  onChange={(v) => updateCard(liveCard.id, { mfaEnabled: v })}
+                />
+              </div>
+
+              {/* Row D: Status (read-only display) */}
+              <div className="flex items-center justify-between px-4 py-2.5">
+                <span className="text-sm text-gray-600">Status</span>
+                <span className="text-sm font-medium text-gray-900">
+                  {liveCard.status === "active" ? "Active" : "Frozen"}
+                </span>
+              </div>
             </div>
           </div>
 
-          {/* Row B: MFA threshold (CTRL-02) */}
-          <div className="flex items-center justify-between px-4 py-2.5">
-            <div>
-              <span className="text-sm text-gray-600">MFA threshold</span>
-              <p className="text-xs text-gray-400">MFA required above this amount.</p>
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="text-sm text-gray-500">$</span>
-              <input
-                key={liveCard.id}
-                type="number"
-                min={0}
-                defaultValue={liveCard.mfaThreshold}
-                onChange={(e) => {
-                  const parsed = parseFloat(e.target.value);
-                  if (isFinite(parsed) && parsed >= 0) {
-                    updateCard(liveCard.id, { mfaThreshold: parsed });
-                  }
-                }}
-                className="border border-gray-200 rounded-lg px-2 py-1 w-28 text-right text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              />
-            </div>
+          {/* 6. Actions: freeze/unfreeze + delete */}
+          <div className="flex items-center gap-2 pt-1 border-t border-gray-100">
+            <button
+              onClick={() =>
+                updateCard(liveCard.id, {
+                  status: liveCard.status === "active" ? "frozen" : "active",
+                })
+              }
+              className="text-xs border border-gray-300 rounded-full px-3 py-1 text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              {liveCard.status === "frozen" ? "Unfreeze" : "Freeze"}
+            </button>
+            <button
+              onClick={() => {
+                removeCard(liveCard.id);
+                onClose();
+              }}
+              className="text-xs border border-red-300 rounded-full px-3 py-1 text-red-600 hover:bg-red-50 transition-colors"
+            >
+              Delete card
+            </button>
+          </div>
+        </>
+      )}
+
+      {/* Used by apps tab — AppUsageBreakdown + Transaction history */}
+      {activeTab === "usage" && (
+        <>
+          {/* 4. App usage breakdown (USAGE-01) */}
+          <div className="mb-5">
+            <AppUsageBreakdown cardId={liveCard.id} />
           </div>
 
-          {/* Row C: MFA enforcement (CTRL-03) */}
-          <div className="flex items-center justify-between px-4 py-2.5">
-            <span className="text-sm text-gray-600">MFA enforcement</span>
-            <Toggle
-              checked={liveCard.mfaEnabled}
-              onChange={(v) => updateCard(liveCard.id, { mfaEnabled: v })}
-            />
-          </div>
+          {/* 5. Transaction history (TXN-01) */}
+          <div className="mb-5">
+            <p className="text-sm font-semibold text-gray-700 mb-2">Transaction history</p>
+            {cardTxns.length === 0 ? (
+              <p className="text-sm text-gray-400">No activity yet.</p>
+            ) : (
+              <ul className="divide-y divide-gray-100 border border-gray-100 rounded-xl overflow-hidden">
+                {cardTxns.map((t) => (
+                  <li key={t.id} className="flex items-center justify-between px-4 py-2.5 gap-2">
+                    {/* Left: merchant + date + subscription pill */}
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="text-sm text-gray-900 truncate">{t.merchant}</span>
+                        {t.isSubscription && (
+                          <span className="text-[10px] bg-gray-100 rounded-full px-2 py-0.5 text-gray-500 shrink-0">
+                            Subscription
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-400 mt-0.5">{appName(t.appId)} · {t.date}</p>
+                    </div>
 
-          {/* Row D: Status (read-only display) */}
-          <div className="flex items-center justify-between px-4 py-2.5">
-            <span className="text-sm text-gray-600">Status</span>
-            <span className="text-sm font-medium text-gray-900">
-              {liveCard.status === "active" ? "Active" : "Frozen"}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* 4. App usage breakdown (USAGE-01) */}
-      <div className="mb-5">
-        <AppUsageBreakdown cardId={liveCard.id} />
-      </div>
-
-      {/* 5. Transaction history (TXN-01) */}
-      <div className="mb-5">
-        <p className="text-sm font-semibold text-gray-700 mb-2">Transaction history</p>
-        {cardTxns.length === 0 ? (
-          <p className="text-sm text-gray-400">No activity yet.</p>
-        ) : (
-          <ul className="divide-y divide-gray-100 border border-gray-100 rounded-xl overflow-hidden">
-            {cardTxns.map((t) => (
-              <li key={t.id} className="flex items-center justify-between px-4 py-2.5 gap-2">
-                {/* Left: merchant + date + subscription pill */}
-                <div className="min-w-0">
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="text-sm text-gray-900 truncate">{t.merchant}</span>
-                    {t.isSubscription && (
-                      <span className="text-[10px] bg-gray-100 rounded-full px-2 py-0.5 text-gray-500 shrink-0">
-                        Subscription
+                    {/* Right: amount + status chip */}
+                    <div className="flex flex-col items-end gap-1 shrink-0">
+                      <span className="text-sm font-medium text-gray-900">
+                        ${t.amount.toFixed(2)}
                       </span>
-                    )}
-                  </div>
-                  <p className="text-xs text-gray-400 mt-0.5">{appName(t.appId)} · {t.date}</p>
-                </div>
-
-                {/* Right: amount + status chip */}
-                <div className="flex flex-col items-end gap-1 shrink-0">
-                  <span className="text-sm font-medium text-gray-900">
-                    ${t.amount.toFixed(2)}
-                  </span>
-                  <span
-                    className={`text-[10px] rounded-full px-2 py-0.5 font-medium ${statusColor[t.status].bg} ${statusColor[t.status].text}`}
-                  >
-                    {t.status.charAt(0).toUpperCase() + t.status.slice(1)}
-                  </span>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      {/* 6. Actions: freeze/unfreeze + delete */}
-      <div className="flex items-center gap-2 pt-1 border-t border-gray-100">
-        <button
-          onClick={() =>
-            updateCard(liveCard.id, {
-              status: liveCard.status === "active" ? "frozen" : "active",
-            })
-          }
-          className="text-xs border border-gray-300 rounded-full px-3 py-1 text-gray-700 hover:bg-gray-50 transition-colors"
-        >
-          {liveCard.status === "frozen" ? "Unfreeze" : "Freeze"}
-        </button>
-        <button
-          onClick={() => {
-            removeCard(liveCard.id);
-            onClose();
-          }}
-          className="text-xs border border-red-300 rounded-full px-3 py-1 text-red-600 hover:bg-red-50 transition-colors"
-        >
-          Delete card
-        </button>
-      </div>
+                      <span
+                        className={`text-[10px] rounded-full px-2 py-0.5 font-medium ${statusColor[t.status].bg} ${statusColor[t.status].text}`}
+                      >
+                        {t.status.charAt(0).toUpperCase() + t.status.slice(1)}
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </>
+      )}
 
       {/* SimulatePaymentModal — keyed to reset internal state on each open */}
       <SimulatePaymentModal
