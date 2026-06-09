@@ -103,4 +103,142 @@ describe("persistence layer", () => {
     const loaded = loadState();
     expect(loaded.cards[0].label).toBe("PATCHED_LABEL");
   });
+
+  // ── Migration tests ─────────────────────────────────────────────────────────
+
+  it("migration: orphan virtual cards get parentCardId attached to first physical card", async () => {
+    // Save a state where virtual cards have no parentCardId
+    const orphanState = {
+      schemaVersion: 0,
+      cards: [
+        {
+          id: "card_physical_01",
+          type: "physical",
+          useCase: "general",
+          label: "Personal",
+          maskedNumber: "•••• 4821",
+          status: "active",
+          limit: 5000,
+          spent: 0,
+          mfaThreshold: 200,
+          mfaEnabled: true,
+          color: "#1a1a2e",
+          icon: "CreditCard",
+        },
+        {
+          id: "card_virtual_01",
+          type: "virtual",
+          useCase: "groceries",
+          label: "Groceries",
+          maskedNumber: "•••• 3172",
+          status: "active",
+          limit: 600,
+          spent: 0,
+          mfaThreshold: 100,
+          mfaEnabled: true,
+          color: "#16a34a",
+          icon: "ShoppingCart",
+          // NO parentCardId
+        },
+      ],
+      transactions: [],
+      apps: [],
+    };
+    localStorageMock.setItem(STORAGE_KEY, JSON.stringify(orphanState));
+    const { loadState } = await import("./persistence");
+    const loaded = loadState();
+    const virtualCard = loaded.cards.find((c) => c.id === "card_virtual_01");
+    expect(virtualCard).toBeDefined();
+    expect(virtualCard?.parentCardId).toBe("card_physical_01");
+  });
+
+  it("migration: already-parented virtual card keeps its parentCardId unchanged", async () => {
+    const alreadyParentedState = {
+      schemaVersion: 1,
+      cards: [
+        {
+          id: "card_physical_01",
+          type: "physical",
+          useCase: "general",
+          label: "Personal",
+          maskedNumber: "•••• 4821",
+          status: "active",
+          limit: 5000,
+          spent: 0,
+          mfaThreshold: 200,
+          mfaEnabled: true,
+          color: "#1a1a2e",
+          icon: "CreditCard",
+        },
+        {
+          id: "card_virtual_01",
+          type: "virtual",
+          useCase: "groceries",
+          label: "Groceries",
+          maskedNumber: "•••• 3172",
+          status: "active",
+          limit: 600,
+          spent: 0,
+          mfaThreshold: 100,
+          mfaEnabled: true,
+          color: "#16a34a",
+          icon: "ShoppingCart",
+          parentCardId: "card_physical_01",
+        },
+      ],
+      transactions: [],
+      apps: [],
+    };
+    localStorageMock.setItem(
+      STORAGE_KEY,
+      JSON.stringify(alreadyParentedState)
+    );
+    const { loadState } = await import("./persistence");
+    const loaded = loadState();
+    const virtualCard = loaded.cards.find((c) => c.id === "card_virtual_01");
+    expect(virtualCard?.parentCardId).toBe("card_physical_01");
+  });
+
+  it("migration: SEED virtual cards all have parentCardId = card_physical_01", async () => {
+    const { loadState } = await import("./persistence");
+    const state = loadState(); // no localStorage = returns migrated SEED
+    const virtualCards = state.cards.filter((c) => c.type === "virtual");
+    expect(virtualCards.length).toBeGreaterThan(0);
+    for (const card of virtualCards) {
+      expect(card.parentCardId).toBe("card_physical_01");
+    }
+  });
+
+  it("migration: orphan virtual cards without any physical card remain parentCardId-less without throwing", async () => {
+    const noPhysicalState = {
+      schemaVersion: 0,
+      cards: [
+        {
+          id: "card_virtual_only",
+          type: "virtual",
+          useCase: "custom",
+          label: "Lonely Virtual",
+          maskedNumber: "•••• 9999",
+          status: "active",
+          limit: 100,
+          spent: 0,
+          mfaThreshold: 50,
+          mfaEnabled: false,
+          color: "#ff0000",
+          icon: "Sparkles",
+          // NO parentCardId, NO physical card
+        },
+      ],
+      transactions: [],
+      apps: [],
+    };
+    localStorageMock.setItem(STORAGE_KEY, JSON.stringify(noPhysicalState));
+    const { loadState } = await import("./persistence");
+    let loaded: ReturnType<typeof loadState> | undefined;
+    expect(() => {
+      loaded = loadState();
+    }).not.toThrow();
+    const virtualCard = loaded?.cards[0];
+    expect(virtualCard?.parentCardId).toBeUndefined();
+  });
 });
