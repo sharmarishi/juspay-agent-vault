@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { PoweredByJuspay } from "../components/branding/PoweredByJuspay";
 import { CardVisual } from "../components/cards/CardVisual";
+import { AddCardModal } from "../components/cards/AddCardModal";
 import { useVaultStore } from "../store/useVaultStore";
 import { JUSPAY_ACCENT } from "../theme/tokens";
 
@@ -11,6 +12,7 @@ export function PaymentsSection() {
   const removeCard = useVaultStore((s) => s.removeCard);
 
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [addOpen, setAddOpen] = useState(false);
 
   return (
     <div className="flex flex-col gap-4">
@@ -25,7 +27,7 @@ export function PaymentsSection() {
 
         {/* Add card button — wired in 02-02 */}
         <button
-          onClick={() => {}} // wired in 02-02
+          onClick={() => setAddOpen(true)}
           className="flex-shrink-0 text-sm rounded-full px-4 py-1.5 text-white font-medium hover:opacity-90 transition-opacity"
           style={{ backgroundColor: JUSPAY_ACCENT }}
         >
@@ -105,6 +107,8 @@ export function PaymentsSection() {
       </div>
 
       <PoweredByJuspay />
+
+      <AddCardModal open={addOpen} onClose={() => setAddOpen(false)} />
     </div>
   );
 }
