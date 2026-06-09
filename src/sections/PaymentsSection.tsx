@@ -42,7 +42,7 @@ export function PaymentsSection() {
       </div>
 
       {/* Tab bar */}
-      <div className="flex items-center gap-1 border-b border-gray-100">
+      <div className="flex items-center gap-1 border-b border-gray-100 overflow-x-auto">
         {(
           [
             { key: "overview",      label: "Overview" },
@@ -53,7 +53,7 @@ export function PaymentsSection() {
           <button
             key={key}
             onClick={() => setTab(key)}
-            className={`text-sm px-3 py-2 -mb-px border-b-2 transition-colors ${
+            className={`text-sm px-3 py-2 -mb-px border-b-2 transition-colors flex-shrink-0 whitespace-nowrap ${
               tab === key
                 ? "border-current font-medium"
                 : "border-transparent text-gray-500 hover:text-gray-700"
@@ -88,7 +88,7 @@ export function PaymentsSection() {
                     <CardVisual card={card} onClick={() => setDetailCard(card)} />
 
                     {/* Action row */}
-                    <div className="flex items-center gap-2 mt-2">
+                    <div className="flex items-center gap-2 mt-2 flex-wrap">
                       {confirmDeleteId === card.id ? (
                         /* Confirm delete prompt */
                         <>
