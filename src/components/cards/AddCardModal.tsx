@@ -28,6 +28,8 @@ interface AddCardModalProps {
 
 export function AddCardModal({ open, onClose }: AddCardModalProps) {
   const addCard = useVaultStore((s) => s.addCard);
+  const cards = useVaultStore((s) => s.cards);
+  const physicalCards = cards.filter((c) => c.type === "physical");
 
   // Mode switcher
   const [mode, setMode] = useState<Mode>("template");
@@ -48,6 +50,9 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
   const [customColor, setCustomColor] = useState(JUSPAY_ACCENT);
   const [customIcon, setCustomIcon] = useState("Sparkles");
 
+  // Shared: parent physical-card selector for virtual creation modes
+  const [parentCardId, setParentCardId] = useState<string>("");
+
   function resetForm() {
     setMode("template");
     setPhysNumber("");
@@ -58,6 +63,7 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
     setCustomLimit("200");
     setCustomColor(JUSPAY_ACCENT);
     setCustomIcon("Sparkles");
+    setParentCardId("");
   }
 
   function handleClose() {
@@ -96,6 +102,7 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
   function handleTemplateSubmit() {
     if (selectedTemplateIndex === null) return;
     const t = USE_CASE_TEMPLATES[selectedTemplateIndex];
+    const resolvedParent = parentCardId || physicalCards[0]?.id;
     addCard({
       id: generateCardId(t.useCase as UseCase),
       type: "virtual",
@@ -109,15 +116,18 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
       mfaEnabled: true,
       color: t.color,
       icon: t.icon,
+      parentCardId: resolvedParent,
     });
     handleClose();
   }
 
-  const templateValid = selectedTemplateIndex !== null;
+  const templateValid =
+    selectedTemplateIndex !== null && physicalCards.length > 0;
 
   // ── Custom submit ──────────────────────────────────────────────────────────
   function handleCustomSubmit() {
     const lim = Number(customLimit) || 200;
+    const resolvedParent = parentCardId || physicalCards[0]?.id;
     addCard({
       id: generateCardId("custom" as UseCase),
       type: "virtual",
@@ -131,11 +141,13 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
       mfaEnabled: true,
       color: customColor,
       icon: customIcon,
+      parentCardId: resolvedParent,
     });
     handleClose();
   }
 
-  const customValid = customLabel.trim() !== "" && Number(customLimit) > 0;
+  const customValid =
+    customLabel.trim() !== "" && Number(customLimit) > 0 && physicalCards.length > 0;
 
   // ── Mode pill styles ───────────────────────────────────────────────────────
   const pillBase =
@@ -282,6 +294,30 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
             })}
           </div>
 
+          {/* Physical card selector */}
+          <div>
+            <label className="block text-xs font-medium text-gray-700 mb-1">
+              Issued under (physical card)
+            </label>
+            {physicalCards.length === 0 ? (
+              <p className="text-sm text-red-500 border border-red-200 rounded-lg px-3 py-2 bg-red-50">
+                Add a physical card first before creating a virtual card.
+              </p>
+            ) : (
+              <select
+                className={inputCls}
+                value={parentCardId || physicalCards[0]?.id}
+                onChange={(e) => setParentCardId(e.target.value)}
+              >
+                {physicalCards.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.label} — {c.maskedNumber}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+
           <div className="flex justify-end">
             <button
               className={primaryBtn(!templateValid)}
@@ -377,6 +413,30 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
                 Virtual · {customColor} · Limit ${Number(customLimit) || 200}
               </p>
             </div>
+          </div>
+
+          {/* Physical card selector */}
+          <div>
+            <label className="block text-xs font-medium text-gray-700 mb-1">
+              Issued under (physical card)
+            </label>
+            {physicalCards.length === 0 ? (
+              <p className="text-sm text-red-500 border border-red-200 rounded-lg px-3 py-2 bg-red-50">
+                Add a physical card first before creating a virtual card.
+              </p>
+            ) : (
+              <select
+                className={inputCls}
+                value={parentCardId || physicalCards[0]?.id}
+                onChange={(e) => setParentCardId(e.target.value)}
+              >
+                {physicalCards.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.label} — {c.maskedNumber}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
 
           <div className="flex justify-end mt-1">
