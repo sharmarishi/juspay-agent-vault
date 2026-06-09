@@ -63,7 +63,10 @@ Plans:
   3. Triggering "Simulate a payment" with an amount below the MFA threshold posts the transaction directly with no challenge
   4. Triggering "Simulate a payment" with an amount above the MFA threshold (and MFA on) presents an OTP/approval challenge modal that blocks the transaction until the correct simulated OTP is entered
   5. A simulated payment is rejected with a clear reason when it would exceed the card's spending limit or the card is frozen
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 03-01-PLAN.md — Editable controls in CardDetailModal: spending limit, MFA threshold, MFA enforcement toggle wired to updateCard; live spend-vs-limit bar (CTRL-01/02/03/04)
+- [ ] 03-02-PLAN.md — Simulate-payment + MFA challenge: SimulatePaymentModal (amount + app picker, frozen/over-limit rejection, blocking OTP challenge) + button in CardDetailModal (SEC-01/02/03/04)
 **UI hint**: yes
 
 ### Phase 4: Transactions, Usage + Dashboard
@@ -88,5 +91,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Shell + Data | 3/3 | Complete   | 2026-06-09 |
 | 2. Card Management | 2/3 | In Progress|  |
-| 3. Controls + Security Simulation | 0/TBD | Not started | - |
+| 3. Controls + Security Simulation | 0/2 | Not started | - |
 | 4. Transactions, Usage + Dashboard | 0/TBD | Not started | - |
