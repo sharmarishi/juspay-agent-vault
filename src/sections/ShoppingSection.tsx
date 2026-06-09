@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { CheckCircle2, ArrowRight, ArrowLeft } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { CheckCircle2, ArrowRight, Send, Sparkles } from "lucide-react";
 import { useVaultStore } from "../store/useVaultStore";
 import { Toggle } from "../components/primitives/Toggle";
 import { IconRenderer } from "../components/cards/IconRenderer";
@@ -16,24 +16,24 @@ interface ProductVariant {
 
 const CATALOG: Record<string, ProductVariant[]> = {
   cup: [
-    { id: "cup-blue",  name: "Blue Ceramic Mug",   color: "#3B82F6", price: 14.0 },
-    { id: "cup-white", name: "White Ceramic Mug",  color: "#E5E7EB", price: 12.0 },
-    { id: "cup-black", name: "Black Travel Cup",   color: "#111827", price: 19.0 },
+    { id: "cup-blue", name: "Blue Ceramic Mug", color: "#3B82F6", price: 14.0 },
+    { id: "cup-white", name: "White Ceramic Mug", color: "#E5E7EB", price: 12.0 },
+    { id: "cup-black", name: "Black Travel Cup", color: "#111827", price: 19.0 },
   ],
   shoes: [
     { id: "shoes-white", name: "White Running Shoes", color: "#F9FAFB", price: 89.0 },
     { id: "shoes-black", name: "Black Athletic Shoes", color: "#111827", price: 79.0 },
-    { id: "shoes-blue",  name: "Blue Trail Runners",   color: "#3B82F6", price: 99.0 },
+    { id: "shoes-blue", name: "Blue Trail Runners", color: "#3B82F6", price: 99.0 },
   ],
   headphones: [
-    { id: "hp-black",  name: "Black Over-Ear Headphones", color: "#111827", price: 149.0 },
-    { id: "hp-white",  name: "White Wireless Headphones",  color: "#E5E7EB", price: 129.0 },
-    { id: "hp-indigo", name: "Indigo Sport Earbuds",       color: "#4F46E5", price: 69.0 },
+    { id: "hp-black", name: "Black Over-Ear Headphones", color: "#111827", price: 149.0 },
+    { id: "hp-white", name: "White Wireless Headphones", color: "#E5E7EB", price: 129.0 },
+    { id: "hp-indigo", name: "Indigo Sport Earbuds", color: "#4F46E5", price: 69.0 },
   ],
   shirt: [
-    { id: "shirt-white", name: "White Cotton T-Shirt",  color: "#F9FAFB", price: 24.0 },
-    { id: "shirt-black", name: "Black Classic T-Shirt",  color: "#111827", price: 22.0 },
-    { id: "shirt-blue",  name: "Blue Graphic T-Shirt",   color: "#3B82F6", price: 27.0 },
+    { id: "shirt-white", name: "White Cotton T-Shirt", color: "#F9FAFB", price: 24.0 },
+    { id: "shirt-black", name: "Black Classic T-Shirt", color: "#111827", price: 22.0 },
+    { id: "shirt-blue", name: "Blue Graphic T-Shirt", color: "#3B82F6", price: 27.0 },
   ],
 };
 
@@ -51,33 +51,65 @@ const ALIASES: Record<string, string> = {
 
 function resolveVariants(query: string): ProductVariant[] {
   const q = query.toLowerCase().trim();
-
-  // Direct catalog key match
   for (const key of Object.keys(CATALOG)) {
     if (q.includes(key)) return CATALOG[key];
   }
-
-  // Alias match
   for (const [alias, target] of Object.entries(ALIASES)) {
     if (q.includes(alias)) return CATALOG[target];
   }
-
-  // Generic fallback
   const noun = q || "Item";
   const label = noun.charAt(0).toUpperCase() + noun.slice(1);
   return [
-    { id: `gen-blue-${noun}`,  name: `Blue ${label}`,  color: "#3B82F6", price: 24.0 },
+    { id: `gen-blue-${noun}`, name: `Blue ${label}`, color: "#3B82F6", price: 24.0 },
     { id: `gen-white-${noun}`, name: `White ${label}`, color: "#E5E7EB", price: 19.0 },
   ];
 }
 
 type Step = "request" | "options" | "card" | "controls" | "mfa" | "confirmed";
+const ORDER: Step[] = ["request", "options", "card", "controls", "mfa", "confirmed"];
 
-const EXAMPLE_CHIPS = [
-  "buy me a cup",
-  "get running shoes",
-  "order headphones",
-];
+const EXAMPLE_CHIPS = ["buy me a cup", "get running shoes", "order headphones"];
+
+// ── Chat bubble primitives ───────────────────────────────────────────────────
+function AgentTurn({
+  text,
+  children,
+}: {
+  text?: React.ReactNode;
+  children?: React.ReactNode;
+}) {
+  return (
+    <div className="flex gap-2.5 items-start">
+      <div
+        className="w-7 h-7 rounded-full flex items-center justify-center text-white shrink-0"
+        style={{ backgroundColor: JUSPAY_ACCENT }}
+      >
+        <Sparkles size={15} />
+      </div>
+      <div className="flex flex-col gap-2 min-w-0 flex-1">
+        {text && (
+          <div className="self-start max-w-[90%] rounded-2xl rounded-tl-sm bg-gray-100 px-3.5 py-2.5 text-sm text-gray-800">
+            {text}
+          </div>
+        )}
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function UserBubble({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex justify-end">
+      <div
+        className="max-w-[85%] rounded-2xl rounded-tr-sm px-3.5 py-2.5 text-sm text-white"
+        style={{ backgroundColor: JUSPAY_ACCENT }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
 
 export function ShoppingSection() {
   const cards = useVaultStore((s) => s.cards);
@@ -86,6 +118,7 @@ export function ShoppingSection() {
   const updateCard = useVaultStore((s) => s.updateCard);
 
   const [step, setStep] = useState<Step>("request");
+  const [composer, setComposer] = useState("");
   const [query, setQuery] = useState("");
   const [variant, setVariant] = useState<ProductVariant | null>(null);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
@@ -94,8 +127,17 @@ export function ShoppingSection() {
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
 
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const stepGte = (s: Step) => ORDER.indexOf(step) >= ORDER.indexOf(s);
+
+  // Auto-scroll the transcript to the newest message
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [step, variant, selectedCardId, error]);
+
   function resetAll() {
     setStep("request");
+    setComposer("");
     setQuery("");
     setVariant(null);
     setSelectedCardId(null);
@@ -105,13 +147,11 @@ export function ShoppingSection() {
     setError("");
   }
 
-  function handleChip(chip: string) {
-    setQuery(chip);
-    setStep("options");
-  }
-
-  function handleContinue() {
-    if (!query.trim()) return;
+  function sendQuery(text: string) {
+    const q = text.trim();
+    if (!q) return;
+    setQuery(q);
+    setComposer("");
     setStep("options");
   }
 
@@ -125,7 +165,7 @@ export function ShoppingSection() {
     setStep("controls");
   }
 
-  function handleProceedToMfa() {
+  function handleProceed() {
     setOtp("");
     setError("");
     setStep("mfa");
@@ -135,8 +175,7 @@ export function ShoppingSection() {
     const card = cards.find((c) => c.id === selectedCardId);
     if (!card || !variant) return;
     const shopSub =
-      subagents.find((s) => s.name.toLowerCase().includes("shop")) ??
-      subagents[0];
+      subagents.find((s) => s.name.toLowerCase().includes("shop")) ?? subagents[0];
     addTransaction({
       id: `txn_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
       cardId: card.id,
@@ -160,320 +199,237 @@ export function ShoppingSection() {
   }
 
   const selectedCard = cards.find((c) => c.id === selectedCardId) ?? null;
+  const composerActive = step === "request";
 
-  // ── Back link ────────────────────────────────────────────────────────────
-  const BACK_MAP: Partial<Record<Step, Step>> = {
-    options: "request",
-    card: "options",
-    controls: "card",
-    mfa: "controls",
-  };
-
-  function BackLink() {
-    const target = BACK_MAP[step];
-    if (!target) return null;
-    return (
-      <button
-        onClick={() => setStep(target)}
-        className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-4 transition-colors"
-      >
-        <ArrowLeft size={14} />
-        Back
-      </button>
-    );
-  }
-
-  // ── Step: request ────────────────────────────────────────────────────────
-  if (step === "request") {
-    return (
-      <div className="flex flex-col gap-4">
-        <div className="rounded-xl border border-gray-200 p-5">
-          <p className="text-sm font-semibold text-gray-900 mb-1">
-            What would you like the agent to buy?
-          </p>
-          <p className="text-xs text-gray-500 mb-4">
-            Type a product request and we'll walk you through a secure agentic
-            purchase — ending in the MFA challenge.
-          </p>
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleContinue()}
-            placeholder="Ask the agent to buy something… e.g. buy me a cup"
-            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-          />
-          {/* Example chips */}
-          <div className="flex flex-wrap gap-2 mt-3">
-            {EXAMPLE_CHIPS.map((chip) => (
-              <button
-                key={chip}
-                onClick={() => handleChip(chip)}
-                className="text-xs px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
-              >
-                {chip}
-              </button>
-            ))}
-          </div>
-          <button
-            onClick={handleContinue}
-            disabled={!query.trim()}
-            className="mt-4 flex items-center gap-1.5 text-sm rounded-full px-5 py-2.5 text-white font-medium hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
-            style={{ backgroundColor: JUSPAY_ACCENT }}
-          >
-            Continue
-            <ArrowRight size={15} />
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // ── Step: options ────────────────────────────────────────────────────────
-  if (step === "options") {
-    const variants = resolveVariants(query);
-    return (
-      <div className="flex flex-col gap-4">
-        <BackLink />
-        <div>
-          <p className="text-sm font-semibold text-gray-900 mb-1">
-            Pick a variant
-          </p>
-          <p className="text-xs text-gray-500 mb-4">
-            The agent found these options for "{query}". Choose one to continue.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {variants.map((v) => (
-              <button
-                key={v.id}
-                onClick={() => handleSelectVariant(v)}
-                className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 text-left hover:border-indigo-300 hover:bg-indigo-50/30 transition-all"
-              >
-                {/* Color swatch */}
-                <span
-                  className="w-8 h-8 rounded-lg flex-shrink-0 border border-gray-200"
-                  style={{ backgroundColor: v.color }}
-                />
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">
-                    {v.name}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-0.5">
-                    ${v.price.toFixed(2)}
-                  </p>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // ── Step: card ───────────────────────────────────────────────────────────
-  if (step === "card") {
-    return (
-      <div className="flex flex-col gap-4">
-        <BackLink />
-        <div>
-          <p className="text-sm font-semibold text-gray-900 mb-1">
-            Choose a payment card
-          </p>
-          <p className="text-xs text-gray-500 mb-4">
-            Select the card you want to use for this purchase.
-          </p>
-          {cards.length === 0 ? (
-            <div className="rounded-xl border border-gray-200 p-6 text-center">
-              <p className="text-sm font-medium text-gray-700 mb-1">
-                No payment cards yet
-              </p>
-              <p className="text-xs text-gray-500">
-                Go to the{" "}
-                <span className="font-medium text-gray-700">Payments</span>{" "}
-                section to add a card, then come back to shop.
-              </p>
-            </div>
-          ) : (
-            <div className="flex flex-col gap-2">
-              {cards.map((card) => (
+  return (
+    <div className="flex flex-col flex-1 min-h-0">
+      {/* Transcript */}
+      <div className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-4 pb-2 pr-1">
+        {/* Greeting + example chips */}
+        <AgentTurn text="Hi! I'm your shopping agent. Tell me what to buy and I'll handle the checkout securely.">
+          {step === "request" && (
+            <div className="flex flex-wrap gap-2">
+              {EXAMPLE_CHIPS.map((chip) => (
                 <button
-                  key={card.id}
-                  onClick={() => handleSelectCard(card.id)}
-                  className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 text-left hover:border-indigo-300 hover:bg-indigo-50/30 transition-all"
+                  key={chip}
+                  onClick={() => sendQuery(chip)}
+                  className="text-xs px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
                 >
-                  {/* Colored dot */}
-                  <span
-                    className="w-3 h-3 rounded-full flex-shrink-0"
-                    style={{ backgroundColor: card.color }}
-                  />
-                  <IconRenderer name={card.icon} size={16} className="text-gray-600 flex-shrink-0" />
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-gray-900 truncate">
-                      {card.label}
-                    </p>
-                  </div>
-                  <span className="text-xs text-gray-400 flex-shrink-0">
-                    {card.maskedNumber}
-                  </span>
+                  {chip}
                 </button>
               ))}
             </div>
           )}
-        </div>
-      </div>
-    );
-  }
+        </AgentTurn>
 
-  // ── Step: controls ───────────────────────────────────────────────────────
-  if (step === "controls") {
-    return (
-      <div className="flex flex-col gap-4">
-        <BackLink />
-        <div className="rounded-xl border border-gray-200 divide-y divide-gray-100">
-          {/* Spend limit row */}
-          <div className="flex items-center justify-between px-4 py-3.5">
-            <div>
-              <p className="text-sm font-medium text-gray-900">
-                Spend limit under control
-              </p>
-              <p className="text-xs text-gray-500 mt-0.5">
-                Ensure this card has a spending limit set
-              </p>
-            </div>
-            <Toggle checked={limitOn} onChange={setLimitOn} />
-          </div>
-          {/* MFA row */}
-          <div className="flex items-center justify-between px-4 py-3.5">
-            <div>
-              <p className="text-sm font-medium text-gray-900">MFA required</p>
-              <p className="text-xs text-gray-500 mt-0.5">
-                Require a one-time code to approve the payment
-              </p>
-            </div>
-            <Toggle checked={mfaOn} onChange={setMfaOn} />
-          </div>
-        </div>
+        {/* User request */}
+        {query && <UserBubble>{query}</UserBubble>}
 
-        {limitOn && mfaOn ? (
-          <button
-            onClick={handleProceedToMfa}
-            className="flex items-center justify-center gap-1.5 text-sm rounded-full px-5 py-2.5 text-white font-medium hover:opacity-90 transition-opacity"
-            style={{ backgroundColor: JUSPAY_ACCENT }}
-          >
-            Proceed to Pay
-            <ArrowRight size={15} />
-          </button>
-        ) : (
-          <p className="text-xs text-gray-400 text-center">
-            Enable both controls to proceed
-          </p>
+        {/* Options */}
+        {stepGte("options") && (
+          <AgentTurn text={`Here are a few options for "${query}". Which one would you like?`}>
+            {!variant && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {resolveVariants(query).map((v) => (
+                  <button
+                    key={v.id}
+                    onClick={() => handleSelectVariant(v)}
+                    className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 bg-white text-left hover:border-indigo-300 hover:bg-indigo-50/30 transition-all"
+                  >
+                    <span
+                      className="w-8 h-8 rounded-lg flex-shrink-0 border border-gray-200"
+                      style={{ backgroundColor: v.color }}
+                    />
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-gray-900 truncate">{v.name}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">${v.price.toFixed(2)}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </AgentTurn>
         )}
+
+        {/* User picks variant */}
+        {variant && (
+          <UserBubble>
+            I'll take the {variant.name} — ${variant.price.toFixed(2)}
+          </UserBubble>
+        )}
+
+        {/* Card selection */}
+        {stepGte("card") &&
+          (cards.length === 0 ? (
+            <AgentTurn text="You don't have any payment cards yet. Add one in the Payments section, then come back to shop." />
+          ) : (
+            <AgentTurn text="Which card should I use for this purchase?">
+              {!selectedCardId && (
+                <div className="flex flex-col gap-2">
+                  {cards.map((card) => (
+                    <button
+                      key={card.id}
+                      onClick={() => handleSelectCard(card.id)}
+                      className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 bg-white text-left hover:border-indigo-300 hover:bg-indigo-50/30 transition-all"
+                    >
+                      <span
+                        className="w-3 h-3 rounded-full flex-shrink-0"
+                        style={{ backgroundColor: card.color }}
+                      />
+                      <IconRenderer name={card.icon} size={16} className="text-gray-600 flex-shrink-0" />
+                      <p className="text-sm font-medium text-gray-900 truncate flex-1">{card.label}</p>
+                      <span className="text-xs text-gray-400 flex-shrink-0">{card.maskedNumber}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </AgentTurn>
+          ))}
+
+        {/* User picks card */}
+        {selectedCard && (
+          <UserBubble>
+            Use {selectedCard.label} {selectedCard.maskedNumber}
+          </UserBubble>
+        )}
+
+        {/* Controls */}
+        {stepGte("controls") && selectedCard && (
+          <AgentTurn text="Before I pay, please confirm your security controls:">
+            <div className="rounded-xl border border-gray-200 bg-white divide-y divide-gray-100">
+              <div className="flex items-center justify-between px-4 py-3">
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Spend limit under control</p>
+                  <p className="text-xs text-gray-500 mt-0.5">Keep this card within its spending limit</p>
+                </div>
+                <Toggle checked={limitOn} onChange={step === "controls" ? setLimitOn : () => {}} />
+              </div>
+              <div className="flex items-center justify-between px-4 py-3">
+                <div>
+                  <p className="text-sm font-medium text-gray-900">MFA required</p>
+                  <p className="text-xs text-gray-500 mt-0.5">Require a one-time code to approve the payment</p>
+                </div>
+                <Toggle checked={mfaOn} onChange={step === "controls" ? setMfaOn : () => {}} />
+              </div>
+            </div>
+            {step === "controls" &&
+              (limitOn && mfaOn ? (
+                <button
+                  onClick={handleProceed}
+                  className="self-start flex items-center gap-1.5 text-sm rounded-full px-5 py-2.5 text-white font-medium hover:opacity-90 transition-opacity"
+                  style={{ backgroundColor: JUSPAY_ACCENT }}
+                >
+                  Proceed to Pay
+                  <ArrowRight size={15} />
+                </button>
+              ) : (
+                <p className="text-xs text-gray-400">Enable both controls to proceed.</p>
+              ))}
+          </AgentTurn>
+        )}
+
+        {/* User proceeds */}
+        {stepGte("mfa") && <UserBubble>Proceed to pay</UserBubble>}
+
+        {/* MFA challenge */}
+        {stepGte("mfa") && step !== "confirmed" && (
+          <AgentTurn
+            text={`This payment of $${variant?.price.toFixed(2) ?? "0.00"} needs your approval. Enter the one-time code to authorize it.`}
+          >
+            <div className="rounded-xl border border-gray-200 bg-white p-4 flex flex-col gap-2">
+              <input
+                type="text"
+                inputMode="numeric"
+                maxLength={6}
+                value={otp}
+                onChange={(e) => {
+                  setOtp(e.target.value);
+                  setError("");
+                }}
+                placeholder="------"
+                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-900 tracking-widest text-center focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              />
+              <p className="text-xs text-gray-400 text-center">Demo hint — enter the code: {DEMO_OTP}</p>
+              {error && <p className="text-sm text-red-600 text-center">{error}</p>}
+              <button
+                onClick={handleVerify}
+                className="w-full text-sm rounded-full px-4 py-2.5 text-white font-medium hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: JUSPAY_ACCENT }}
+              >
+                Verify &amp; pay
+              </button>
+            </div>
+          </AgentTurn>
+        )}
+
+        {/* Confirmation */}
+        {step === "confirmed" && (
+          <AgentTurn>
+            <div className="rounded-xl border border-gray-200 bg-white p-4 flex flex-col gap-3">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 size={22} className="text-green-500 shrink-0" />
+                <p className="text-sm font-semibold text-gray-900">Order confirmed!</p>
+              </div>
+              {variant && (
+                <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-gray-50 border border-gray-100">
+                  <span
+                    className="w-6 h-6 rounded-md flex-shrink-0 border border-gray-200"
+                    style={{ backgroundColor: variant.color }}
+                  />
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate">{variant.name}</p>
+                    <p className="text-xs text-gray-500">${variant.price.toFixed(2)}</p>
+                  </div>
+                </div>
+              )}
+              {selectedCard && (
+                <p className="text-xs text-gray-500">
+                  Paid with <span className="font-medium text-gray-700">{selectedCard.label}</span>{" "}
+                  {selectedCard.maskedNumber} · recorded in Payments → Transactions.
+                </p>
+              )}
+              <button
+                onClick={resetAll}
+                className="self-start text-sm rounded-full px-5 py-2.5 text-white font-medium hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: JUSPAY_ACCENT }}
+              >
+                Shop again
+              </button>
+            </div>
+          </AgentTurn>
+        )}
+
+        <div ref={bottomRef} />
       </div>
-    );
-  }
 
-  // ── Step: mfa ────────────────────────────────────────────────────────────
-  if (step === "mfa") {
-    return (
-      <div className="flex flex-col gap-4">
-        <BackLink />
-        {/* Indigo callout */}
-        <div className="rounded-xl bg-indigo-50 border border-indigo-100 px-4 py-4">
-          <p className="text-sm font-semibold text-indigo-800 mb-1">
-            Verify this payment
-          </p>
-          <p className="text-sm text-indigo-700">
-            This payment of ${variant?.price.toFixed(2) ?? "0.00"} exceeds the
-            MFA threshold for this card. Enter the one-time code to approve it.
-          </p>
-        </div>
-
-        {/* OTP input */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">
-            One-time code
-          </label>
+      {/* Composer */}
+      <div className="pt-3 mt-2 border-t border-gray-100">
+        <div className="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1.5">
           <input
             type="text"
-            inputMode="numeric"
-            maxLength={6}
-            value={otp}
-            onChange={(e) => {
-              setOtp(e.target.value);
-              setError("");
-            }}
-            placeholder="------"
-            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-900 tracking-widest text-center focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            value={composer}
+            disabled={!composerActive}
+            onChange={(e) => setComposer(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && sendQuery(composer)}
+            placeholder={
+              composerActive
+                ? "Ask the agent to buy something… e.g. buy me a cup"
+                : step === "confirmed"
+                ? "Tap “Shop again” to start a new order"
+                : "Continue with the options above"
+            }
+            className="flex-1 bg-transparent text-sm text-gray-900 placeholder-gray-400 focus:outline-none disabled:cursor-not-allowed px-1"
           />
-          <p className="mt-1.5 text-xs text-gray-400 text-center">
-            Demo hint — Enter the code: {DEMO_OTP}
-          </p>
+          <button
+            onClick={() => sendQuery(composer)}
+            disabled={!composerActive || !composer.trim()}
+            aria-label="Send"
+            className="flex items-center justify-center h-8 w-8 rounded-full text-white shrink-0 transition-opacity disabled:opacity-40"
+            style={{ backgroundColor: JUSPAY_ACCENT }}
+          >
+            <Send size={15} />
+          </button>
         </div>
-
-        {/* Inline error */}
-        {error && (
-          <div className="rounded-xl bg-red-50 border border-red-100 px-4 py-2.5">
-            <p className="text-sm text-red-600">{error}</p>
-          </div>
-        )}
-
-        <button
-          onClick={handleVerify}
-          className="w-full text-sm rounded-full px-4 py-2.5 text-white font-medium hover:opacity-90 transition-opacity"
-          style={{ backgroundColor: JUSPAY_ACCENT }}
-        >
-          Verify &amp; pay
-        </button>
-      </div>
-    );
-  }
-
-  // ── Step: confirmed ──────────────────────────────────────────────────────
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="rounded-xl border border-gray-200 p-6 text-center flex flex-col items-center gap-4">
-        <CheckCircle2 size={40} className="text-green-500" />
-        <div>
-          <p className="text-base font-semibold text-gray-900 mb-1">
-            Purchase confirmed!
-          </p>
-          <p className="text-xs text-gray-500">
-            Your agent has completed the purchase securely.
-          </p>
-        </div>
-
-        {/* Product summary */}
-        {variant && (
-          <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 w-full justify-center">
-            <span
-              className="w-6 h-6 rounded-md flex-shrink-0 border border-gray-200"
-              style={{ backgroundColor: variant.color }}
-            />
-            <div className="text-left">
-              <p className="text-sm font-medium text-gray-900">{variant.name}</p>
-              <p className="text-xs text-gray-500">${variant.price.toFixed(2)}</p>
-            </div>
-          </div>
-        )}
-
-        {/* Card used */}
-        {selectedCard && (
-          <p className="text-xs text-gray-500">
-            Paid with{" "}
-            <span className="font-medium text-gray-700">
-              {selectedCard.label}
-            </span>{" "}
-            {selectedCard.maskedNumber}
-          </p>
-        )}
-
-        <button
-          onClick={resetAll}
-          className="mt-2 text-sm rounded-full px-5 py-2.5 text-white font-medium hover:opacity-90 transition-opacity"
-          style={{ backgroundColor: JUSPAY_ACCENT }}
-        >
-          Shop again
-        </button>
       </div>
     </div>
   );
