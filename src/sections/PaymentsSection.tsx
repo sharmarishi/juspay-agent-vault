@@ -25,8 +25,8 @@ export function PaymentsSection() {
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-xl font-semibold text-gray-900">Payments</h2>
-          <p className="text-sm text-gray-500 mt-1">
+          {/* Title is rendered by the settings shell (SettingsContent h1) — only the subtitle here */}
+          <p className="text-sm text-gray-500">
             Manage cards your ChatGPT apps use.
           </p>
         </div>
