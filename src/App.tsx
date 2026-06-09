@@ -1,7 +1,8 @@
 import React from "react";
+import { SettingsModal } from "./components/settings/SettingsModal";
 
 function App() {
-  return <div>App</div>;
+  return <SettingsModal />;
 }
 
 export default App;
