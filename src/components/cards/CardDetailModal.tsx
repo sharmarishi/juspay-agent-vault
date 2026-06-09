@@ -20,7 +20,7 @@ interface CardDetailModalProps {
 export function CardDetailModal({ card, onClose, onSelectCard }: CardDetailModalProps) {
   const cards = useVaultStore((s) => s.cards);
   const transactions = useVaultStore((s) => s.transactions);
-  const apps = useVaultStore((s) => s.apps);
+  const subagents = useVaultStore((s) => s.subagents);
   const updateCard = useVaultStore((s) => s.updateCard);
   const removeCard = useVaultStore((s) => s.removeCard);
 
@@ -36,17 +36,17 @@ export function CardDetailModal({ card, onClose, onSelectCard }: CardDetailModal
 
   const liveCard = cards.find((c) => c.id === card.id) ?? card;
 
-  // Tab list is card-type aware: physical cards get all three; virtual cards omit "Virtual cards"
+  // Tab list is card-type aware: physical cards get all three; virtual cards omit "Tokens"
   const visibleTabs: { key: DetailTab; label: string }[] =
     liveCard.type === "physical"
       ? [
           { key: "virtual", label: "Tokens" },
           { key: "controls", label: "Controls" },
-          { key: "usage", label: "Used by apps" },
+          { key: "usage", label: "Used by Subagents" },
         ]
       : [
           { key: "controls", label: "Controls" },
-          { key: "usage", label: "Used by apps" },
+          { key: "usage", label: "Used by Subagents" },
         ];
 
   // Belt-and-suspenders: if current tab is not in visible list, fall back to "controls"
@@ -65,7 +65,8 @@ export function CardDetailModal({ card, onClose, onSelectCard }: CardDetailModal
       ? cards.find((c) => c.id === liveCard.parentCardId)?.label ?? null
       : null;
 
-  const appName = (appId: string) => apps.find((a) => a.id === appId)?.name ?? "";
+  const subagentName = (subagentId: string) =>
+    subagents.find((s) => s.id === subagentId)?.name ?? "";
 
   const cardTxns = transactions
     .filter((t) => t.cardId === liveCard.id)
@@ -78,6 +79,11 @@ export function CardDetailModal({ card, onClose, onSelectCard }: CardDetailModal
     pending: { bg: "bg-amber-100", text: "text-amber-700" },
     declined: { bg: "bg-red-100", text: "text-red-700" },
   } as const;
+
+  // Resolve granted subagents for this card
+  const grantedSubagents = (liveCard.subagentIds ?? [])
+    .map((id) => subagents.find((s) => s.id === id))
+    .filter(Boolean) as typeof subagents;
 
   return (
     <Modal
@@ -95,10 +101,30 @@ export function CardDetailModal({ card, onClose, onSelectCard }: CardDetailModal
 
       {/* 1a. Parent label for virtual cards */}
       {parentLabel && (
-        <p className="text-xs text-gray-400 -mt-3 mb-4">
+        <p className="text-xs text-gray-400 -mt-3 mb-3">
           Issued under <span className="font-medium text-gray-600">{parentLabel}</span>
         </p>
       )}
+
+      {/* 1b. Subagent access display */}
+      <div className="mb-4">
+        <p className="text-xs font-medium text-gray-500 mb-1.5">Subagent access</p>
+        {grantedSubagents.length === 0 ? (
+          <p className="text-xs text-gray-400">No subagents granted access yet.</p>
+        ) : (
+          <div className="flex flex-wrap gap-1.5">
+            {grantedSubagents.map((sg) => (
+              <span
+                key={sg.id}
+                className="flex items-center gap-1 text-[11px] rounded-full px-2.5 py-0.5 bg-gray-100 text-gray-600 border border-gray-200"
+              >
+                <IconRenderer name={sg.icon} size={11} className="shrink-0" />
+                {sg.name}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* 2a. Simulate a payment button — SEC-01 entry point */}
       <div className="mb-4">
@@ -147,7 +173,7 @@ export function CardDetailModal({ card, onClose, onSelectCard }: CardDetailModal
 
       {/* TAB PANELS — render only the active panel */}
 
-      {/* Virtual cards tab (physical cards only) */}
+      {/* Tokens tab (physical cards only) */}
       {activeTab === "virtual" && (
         <div className="mb-5">
           <p className="text-sm font-semibold text-gray-700 mb-2">Tokens</p>
@@ -292,10 +318,10 @@ export function CardDetailModal({ card, onClose, onSelectCard }: CardDetailModal
         </>
       )}
 
-      {/* Used by apps tab — AppUsageBreakdown + Transaction history */}
+      {/* Used by Subagents tab — AppUsageBreakdown + Transaction history */}
       {activeTab === "usage" && (
         <>
-          {/* 4. App usage breakdown (USAGE-01) */}
+          {/* 4. Subagent usage breakdown (USAGE-01) */}
           <div className="mb-5">
             <AppUsageBreakdown cardId={liveCard.id} />
           </div>
@@ -309,7 +335,7 @@ export function CardDetailModal({ card, onClose, onSelectCard }: CardDetailModal
               <ul className="divide-y divide-gray-100 border border-gray-100 rounded-xl overflow-hidden">
                 {cardTxns.map((t) => (
                   <li key={t.id} className="flex items-center justify-between px-4 py-2.5 gap-2">
-                    {/* Left: merchant + date + subscription pill */}
+                    {/* Left: merchant + subagent pill + subscription tag */}
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5 flex-wrap">
                         <span className="text-sm text-gray-900 truncate">{t.merchant}</span>
@@ -318,8 +344,19 @@ export function CardDetailModal({ card, onClose, onSelectCard }: CardDetailModal
                             Subscription
                           </span>
                         )}
+                        {subagentName(t.subagentId) && (
+                          <span
+                            className="text-[10px] rounded-full px-2 py-0.5 font-medium shrink-0"
+                            style={{
+                              color: JUSPAY_ACCENT,
+                              backgroundColor: JUSPAY_ACCENT + "14",
+                            }}
+                          >
+                            {subagentName(t.subagentId)}
+                          </span>
+                        )}
                       </div>
-                      <p className="text-xs text-gray-400 mt-0.5">{appName(t.appId)} · {t.date}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">{t.date}</p>
                     </div>
 
                     {/* Right: amount + status chip */}

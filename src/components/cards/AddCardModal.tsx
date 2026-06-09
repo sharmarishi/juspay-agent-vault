@@ -23,6 +23,7 @@ interface AddCardModalProps {
 export function AddCardModal({ open, onClose }: AddCardModalProps) {
   const addCard = useVaultStore((s) => s.addCard);
   const cards = useVaultStore((s) => s.cards);
+  const subagents = useVaultStore((s) => s.subagents);
   const physicalCards = cards.filter((c) => c.type === "physical");
 
   // Mode switcher
@@ -46,6 +47,15 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
   // Shared: parent physical-card selector for virtual creation modes
   const [parentCardId, setParentCardId] = useState<string>("");
 
+  // Subagent multi-select (for virtual modes)
+  const [selectedSubagentIds, setSelectedSubagentIds] = useState<string[]>([]);
+
+  function toggleSubagent(id: string) {
+    setSelectedSubagentIds((prev) =>
+      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
+    );
+  }
+
   function resetForm() {
     setMode("physical");
     setPhysNumber("");
@@ -56,6 +66,7 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
     setCustomLimit("200");
     setCustomColor(JUSPAY_ACCENT);
     setParentCardId("");
+    setSelectedSubagentIds([]);
   }
 
   function handleClose() {
@@ -83,6 +94,7 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
       icon: "CreditCard",
       holder: physHolder,
       expiry: physExpiry,
+      subagentIds: [],
     });
     handleClose();
   }
@@ -109,6 +121,7 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
       color: t.color,
       icon: t.icon,
       parentCardId: resolvedParent,
+      subagentIds: selectedSubagentIds,
     });
     handleClose();
   }
@@ -134,6 +147,7 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
       color: customColor,
       icon: DEFAULT_TOKEN_ICON,
       parentCardId: resolvedParent,
+      subagentIds: selectedSubagentIds,
     });
     handleClose();
   }
@@ -156,6 +170,32 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
   // ── Input style ────────────────────────────────────────────────────────────
   const inputCls =
     "border border-gray-300 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-indigo-300";
+
+  // ── Subagent multi-select chip block (shared across template + custom modes) ──
+  const SubagentSelector = () => (
+    <div>
+      <label className="block text-xs font-medium text-gray-700 mb-1.5">
+        Which Subagents can access this card
+      </label>
+      <div className="flex flex-wrap gap-2">
+        {subagents.map((sg) => {
+          const isSelected = selectedSubagentIds.includes(sg.id);
+          return (
+            <button
+              key={sg.id}
+              type="button"
+              className={`${pillBase} flex items-center gap-1.5 text-xs px-3 py-1`}
+              style={isSelected ? pillActive : pillInactive}
+              onClick={() => toggleSubagent(sg.id)}
+            >
+              <IconRenderer name={sg.icon} size={13} className="shrink-0" />
+              {sg.name}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
 
   return (
     <Modal open={open} onClose={handleClose} title="Add a card">
@@ -286,6 +326,9 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
             })}
           </div>
 
+          {/* Subagent multi-select */}
+          <SubagentSelector />
+
           {/* Physical card selector */}
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1">
@@ -387,6 +430,9 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
               </p>
             </div>
           </div>
+
+          {/* Subagent multi-select */}
+          <SubagentSelector />
 
           {/* Physical card selector */}
           <div>
