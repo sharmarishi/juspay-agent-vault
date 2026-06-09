@@ -22,22 +22,22 @@ their agentic payment security.
 
 ### Validated
 
-(None yet — ship to validate)
+- ✓ Recreate the ChatGPT settings modal shell with a new "Payments" section — v1.0.0
+- ✓ Add and manage physical cards (mock entry) with the same controls as virtual cards — v1.0.0
+- ✓ Generate virtual cards per use-case from templates + a fully custom option — v1.0.0
+- ✓ Set and edit a spending limit per card — v1.0.0
+- ✓ Set and edit an MFA threshold per card — v1.0.0
+- ✓ Toggle card features on/off per card (freeze/unfreeze, MFA on/off) — v1.0.0
+- ✓ Simulate a payment with a blocking MFA/OTP challenge above the threshold — v1.0.0
+- ✓ View transaction history per card and combined across all cards, incl. subscriptions — v1.0.0
+- ✓ Per-card usage attributed to ChatGPT connected apps — v1.0.0
+- ✓ Payments overview dashboard (cards, spend vs. limits, MFA status, recent activity) — v1.0.0
+- ✓ Subtle Juspay co-brand within neutral ChatGPT styling — v1.0.0
+- ✓ Seeded demo data + localStorage persistence with reset — v1.0.0
 
 ### Active
 
-- [ ] Recreate the ChatGPT settings modal shell (left nav + content pane) with a new "Payments" section, matching ChatGPT's clean light aesthetic
-- [ ] Add and manage physical cards (mock card entry); display them with the same controls as virtual cards
-- [ ] Generate virtual cards per use-case from templates (Groceries, SaaS, Travel, Shopping) — each with icon, color, and sensible default limit — plus a fully custom option
-- [ ] Set and edit a spending limit per card
-- [ ] Set and edit an MFA threshold per card (MFA required above the configured amount)
-- [ ] Toggle card features on/off per card (e.g. card active/frozen, MFA on/off)
-- [ ] Simulate a payment from a card; if the amount exceeds the card's MFA threshold, present an OTP/approval challenge that must be cleared before the transaction posts
-- [ ] View transaction history per card and across all cards, including recurring subscription payments
-- [ ] View per-card usage attributed to ChatGPT connected apps (which app spent on which card)
-- [ ] Comprehensive payments dashboard summarizing cards, spend vs. limits, transactions, and auth settings
-- [ ] Subtle Juspay co-brand ("Powered by Juspay" + accent color on payment cards) within the neutral ChatGPT styling
-- [ ] Seed realistic demo data; persist user changes (cards, limits, toggles, transactions) across refresh via localStorage
+(None — v1.0.0 shipped. Run `/gsd:new-milestone` to define the next set.)
 
 ### Out of Scope
 
@@ -93,5 +93,15 @@ This document evolves at phase transitions and milestone boundaries.
 3. Audit Out of Scope — reasons still valid?
 4. Update Context with current state
 
+## Current State
+
+**Shipped:** v1.0.0 MVP (2026-06-09) — full frontend demo complete and running via `npm run dev`.
+**Codebase:** ~2,374 LOC TypeScript across 22 components; React + Vite + Tailwind + Zustand; all state seeded + localStorage-persisted.
+**Known tech debt:** No formal verification (verifier/plan-checker were off for speed — validated via build + code inspection); non-Payments settings sections are placeholders; lucide-react not tree-shaken (~940 KB bundle).
+
+## Next Milestone Goals
+
+Candidate v2 ideas (deferred from v1): full ChatGPT chat-page entry point + account dropdown, dark mode / appearance toggle, configurable MFA method (authenticator vs. SMS). Confirm scope via `/gsd:new-milestone`.
+
 ---
-*Last updated: 2026-06-09 after initialization*
+*Last updated: 2026-06-09 after v1.0.0 milestone*
