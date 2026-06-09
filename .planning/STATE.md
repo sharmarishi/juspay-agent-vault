@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-06-09)
 Phase: 04
 Plan: Not started
 Status: Phase complete — ready for verification
-Last activity: 2026-06-09 - Completed quick task 260609-m9h: Powered by Juspay moved to top-right
+Last activity: 2026-06-09 - Completed quick task 260609-mcd: Fixed duplicate Payments header
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -117,6 +117,7 @@ None yet.
 | 260609-lo4 | Add Card modal now defaults to the Physical Card tab (initial state + resetForm) instead of From template | 2026-06-09 | a1087f8 | [260609-lo4-add-card-modal-should-default-to-the-phy](./quick/260609-lo4-add-card-modal-should-default-to-the-phy/) |
 | 260609-m65 | Card visual: Juspay wordmark replaced with Visa logo (white chip); user-facing terminology renamed Physical Card→card, Virtual Card→tokens (display strings only, internal literals untouched) | 2026-06-09 | e8ea7ca | [260609-m65-card-visual-replace-juspay-mark-with-vis](./quick/260609-m65-card-visual-replace-juspay-mark-with-vis/) |
 | 260609-m9h | Moved Powered by Juspay mark from bottom of Payments section to top-right of header (stacked above Add card button); dropped mt-6 from component | 2026-06-09 | 834b4d7 | [260609-m9h-move-powered-by-juspay-mark-from-bottom-](./quick/260609-m9h-move-powered-by-juspay-mark-from-bottom-/) |
+| 260609-mcd | Fixed duplicate "Payments" header — removed redundant h2 in PaymentsSection (settings shell already renders the section title as h1) | 2026-06-09 | 39b6ad8 | [260609-mcd-remove-duplicate-payments-header-in-paym](./quick/260609-mcd-remove-duplicate-payments-header-in-paym/) |
 
 ## Session Continuity
 
