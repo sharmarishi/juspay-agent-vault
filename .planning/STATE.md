@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-06-09)
 Phase: 04
 Plan: Not started
 Status: Phase complete — ready for verification
-Last activity: 2026-06-09 - Completed quick task 260609-kpv: Tabbed card detail view
+Last activity: 2026-06-09 - Completed quick task 260609-lo4: Add Card defaults to Physical Card tab
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -114,6 +114,7 @@ None yet.
 | 260609-kmf | Juspay logo mark added to PoweredByJuspay: relocate asset to src/assets, add vite-env.d.ts, replace accent dot with 16px circular img | 2026-06-09 | f3be5c9 | [260609-kmf-in-the-powered-by-juspay-branding-add-a-](./quick/260609-kmf-in-the-powered-by-juspay-branding-add-a-/) |
 | 260609-kpv | CardDetailModal reorganized into horizontal tabs (Virtual cards / Controls / Used by apps) with persistent header; physical cards get 3 tabs, virtual cards 2 | 2026-06-09 | cdf7de2 | [260609-kpv-in-the-card-detail-view-divide-the-singl](./quick/260609-kpv-in-the-card-detail-view-divide-the-singl/) |
 | 260609-lfl | Full mobile-responsive layout: settings shell (full-screen + horizontal nav strip), Payments tab content reflow, and all card modals near-full-screen on 375px | 2026-06-09 | 5a109a6 | [260609-lfl-make-the-site-mobile-friendly-responsive](./quick/260609-lfl-make-the-site-mobile-friendly-responsive/) |
+| 260609-lo4 | Add Card modal now defaults to the Physical Card tab (initial state + resetForm) instead of From template | 2026-06-09 | a1087f8 | [260609-lo4-add-card-modal-should-default-to-the-phy](./quick/260609-lo4-add-card-modal-should-default-to-the-phy/) |
 
 ## Session Continuity
 
