@@ -57,8 +57,8 @@ Requirements for the initial frontend-only demo. Each maps to roadmap phases.
 
 ### Data
 
-- [ ] **DATA-01**: App ships with realistic seeded cards, transactions, subscriptions, and app-usage data
-- [ ] **DATA-02**: User changes (new cards, edited limits/thresholds, toggles, new simulated transactions) persist across refresh via localStorage
+- [x] **DATA-01**: App ships with realistic seeded cards, transactions, subscriptions, and app-usage data
+- [x] **DATA-02**: User changes (new cards, edited limits/thresholds, toggles, new simulated transactions) persist across refresh via localStorage
 - [ ] **DATA-03**: User can reset the demo to seeded state
 
 ## v2 Requirements
@@ -97,8 +97,8 @@ Populated during roadmap creation.
 | SHELL-02 | Phase 1 | Complete |
 | SHELL-03 | Phase 1 | Complete |
 | SHELL-04 | Phase 1 | Complete |
-| DATA-01 | Phase 1 | Pending |
-| DATA-02 | Phase 1 | Pending |
+| DATA-01 | Phase 1 | Complete |
+| DATA-02 | Phase 1 | Complete |
 | DATA-03 | Phase 1 | Pending |
 | CARD-01 | Phase 2 | Pending |
 | CARD-02 | Phase 2 | Pending |

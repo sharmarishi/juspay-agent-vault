@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-shell-data-01-PLAN.md
-last_updated: "2026-06-09T06:39:42.326Z"
+stopped_at: Completed 01-shell-data-02-PLAN.md
+last_updated: "2026-06-09T06:48:54.681Z"
 last_activity: 2026-06-09
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
+  completed_plans: 2
   percent: 0
 ---
 
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-06-09)
 ## Current Position
 
 Phase: 01 (shell-data) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 Status: Ready to execute
 Last activity: 2026-06-09
 
@@ -53,6 +53,7 @@ Progress: [░░░░░░░░░░] 0%
 
 *Updated after each plan completion*
 | Phase 01-shell-data P01 | 5 | 3 tasks | 23 files |
+| Phase 01-shell-data P02 | 20 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -69,6 +70,9 @@ Recent decisions affecting current work:
 - [Phase 01-shell-data]: PaymentsSection is a static stub in Plan 01-01; data layer wired in Plan 01-03
 - [Phase 01-shell-data]: JUSPAY_ACCENT (#4F46E5) uses inline style on Toggle ON state - Tailwind JIT cannot handle dynamic hex values
 - [Phase 01-shell-data]: LucideIcon type used in NavItem interface to satisfy TypeScript strict mode with lucide-react
+- [Phase 01-shell-data]: Zustand manual persistence (no persist middleware) — keeps schema explicit and inspectable
+- [Phase 01-shell-data]: vi.stubGlobal for localStorage mock — avoids Node.js v25 native localStorage conflicts with jsdom in vitest 4
+- [Phase 01-shell-data]: structuredClone for SEED deep clones — ensures mutations never corrupt original seed reference
 
 ### Pending Todos
 
@@ -80,6 +84,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-09T06:39:42.324Z
-Stopped at: Completed 01-shell-data-01-PLAN.md
+Last session: 2026-06-09T06:48:54.679Z
+Stopped at: Completed 01-shell-data-02-PLAN.md
 Resume file: None
