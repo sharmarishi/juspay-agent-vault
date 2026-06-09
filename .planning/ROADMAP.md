@@ -46,7 +46,11 @@ Plans:
   3. All cards display as card-style visuals with masked number, use-case label, and status badge
   4. Clicking a card opens a detail view that shows its settings, current limit usage, and recent activity
   5. User can freeze/unfreeze a card with a toggle and delete a card from the detail view or card list
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 02-01-PLAN.md — Card visuals + grid + freeze/delete: CardVisual, Modal/IconRenderer/cardTemplates primitives, reworked PaymentsSection grid (CARD-04/05/06)
+- [ ] 02-02-PLAN.md — Add physical card + generate virtual card flows: AddCardModal (physical form / template / custom) wired into PaymentsSection (CARD-01/02/03)
+- [ ] 02-03-PLAN.md — Card detail view: CardDetailModal with read-only settings, spend-vs-limit bar, recent activity, freeze/delete (CARD-07)
 **UI hint**: yes
 
 ### Phase 3: Controls + Security Simulation
@@ -83,6 +87,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Shell + Data | 3/3 | Complete   | 2026-06-09 |
-| 2. Card Management | 0/TBD | Not started | - |
+| 2. Card Management | 0/3 | Not started | - |
 | 3. Controls + Security Simulation | 0/TBD | Not started | - |
 | 4. Transactions, Usage + Dashboard | 0/TBD | Not started | - |
