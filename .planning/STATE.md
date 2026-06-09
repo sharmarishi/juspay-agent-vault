@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: verifying
-stopped_at: Completed quick task 260609-msi: Introduce Subagents concept replacing Apps
-last_updated: "2026-06-09T16:34:00.000Z"
+stopped_at: Completed quick task 260609-npa: Add a guided Shopping/commerce demo section
+last_updated: "2026-06-09T11:38:23Z"
 last_activity: 2026-06-09
 progress:
   total_phases: 4
@@ -128,9 +128,10 @@ None yet.
 | 260609-nbk | Added Subagents tab to Payments: per-subagent collapsible transaction list showing card/token used, amount, status (SubagentsList) | 2026-06-09 | 6c8ca2f | [260609-nbk-add-a-subagents-tab-to-the-payments-page](./quick/260609-nbk-add-a-subagents-tab-to-the-payments-page/) |
 | 260609-nj7 | Mobile: replaced horizontal settings nav with hamburger + left slide-in drawer; added backdrop-blur + modal padding so the ChatGPT background shows blurred on mobile | 2026-06-09 | 65b1456 | [260609-nj7-mobile-replace-horizontal-settings-nav-w](./quick/260609-nj7-mobile-replace-horizontal-settings-nav-w/) |
 | 260609-nmy | Made the blurred ChatGPT background more visible on mobile — capped modal to 82vh + p-6 padding (desktop unchanged) | 2026-06-09 | eccb148 | [260609-nmy-make-the-blurred-chatgpt-background-more](./quick/260609-nmy-make-the-blurred-chatgpt-background-more/) |
+| 260609-npa | Added guided Shopping demo section (request → options → card → controls → MFA challenge → confirmation) wired as new "Shopping" nav item after Payments | 2026-06-09 | 957a318 | [260609-npa-add-a-guided-shopping-commerce-demo-sect](./quick/260609-npa-add-a-guided-shopping-commerce-demo-sect/) |
 
 ## Session Continuity
 
-Last session: 2026-06-09T16:34:00.000Z
-Stopped at: Completed quick task 260609-msi: Introduce Subagents concept replacing Apps
+Last session: 2026-06-09T11:38:23Z
+Stopped at: Completed quick task 260609-npa: Add a guided Shopping/commerce demo section
 Resume file: None
