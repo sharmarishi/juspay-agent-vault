@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-06-09)
 Phase: 04
 Plan: Not started
 Status: Phase complete — ready for verification
-Last activity: 2026-06-09 - Completed quick task 260609-o5k: Demo tag on Payments + Shopping nav
+Last activity: 2026-06-09 - Completed quick task 260609-o88: Prefilled sample card + CVV field
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -132,6 +132,7 @@ None yet.
 | 260609-nxd | Recast the Shopping demo as a chat experience (agent/user bubbles + inline option/card/toggle/OTP widgets + composer), reusing the existing flow logic | 2026-06-09 | 30082b9 | [260609-nxd-rewrite-the-shopping-demo-as-a-chat-expe](./quick/260609-nxd-rewrite-the-shopping-demo-as-a-chat-expe/) |
 | 260609-o2h | Shopping chat: card picker capped at 2; replaced MFA/limit toggles with auto green checkmarks (agent ran checks), Proceed to Pay shows automatically | 2026-06-09 | e48525f | [260609-o2h-shopping-chat-cap-card-picker-at-2-repla](./quick/260609-o2h-shopping-chat-cap-card-picker-at-2-repla/) |
 | 260609-o5k | Highlighted Payments + Shopping nav items with a subtle indigo "Demo" pill (data-driven NavItem.tag) | 2026-06-09 | 35ff255 | [260609-o5k-highlight-payments-and-shopping-nav-item](./quick/260609-o5k-highlight-payments-and-shopping-nav-item/) |
+| 260609-o88 | Prefilled a sample card (4242…, 12/27, CVV 123, holder) in the Add Card physical form and added a CVV field (form-only) | 2026-06-09 | 6ab7160 | [260609-o88-prefill-a-sample-card-number-expiry-cvv-](./quick/260609-o88-prefill-a-sample-card-number-expiry-cvv-/) |
 
 ## Session Continuity
 
