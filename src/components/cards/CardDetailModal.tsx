@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import type { Card } from "../../data/types";
 import { Modal } from "../primitives/Modal";
 import { CardVisual } from "./CardVisual";
@@ -8,6 +8,8 @@ import { useVaultStore } from "../../store/useVaultStore";
 import { SimulatePaymentModal } from "./SimulatePaymentModal";
 import { JUSPAY_ACCENT } from "../../theme/tokens";
 import { AppUsageBreakdown } from "../payments/AppUsageBreakdown";
+
+type DetailTab = "virtual" | "controls" | "usage";
 
 interface CardDetailModalProps {
   card: Card | null;
@@ -23,12 +25,33 @@ export function CardDetailModal({ card, onClose, onSelectCard }: CardDetailModal
   const removeCard = useVaultStore((s) => s.removeCard);
 
   const [simulateOpen, setSimulateOpen] = useState(false);
+  const [tab, setTab] = useState<DetailTab>("controls");
+
+  // Reset to "controls" whenever the card changes so we never strand on a hidden tab
+  useEffect(() => { setTab("controls"); }, [card?.id]);
 
   if (!card) {
     return <Modal open={false} onClose={onClose} title="Card">{null}</Modal>;
   }
 
   const liveCard = cards.find((c) => c.id === card.id) ?? card;
+
+  // Tab list is card-type aware: physical cards get all three; virtual cards omit "Virtual cards"
+  const visibleTabs: { key: DetailTab; label: string }[] =
+    liveCard.type === "physical"
+      ? [
+          { key: "virtual", label: "Virtual cards" },
+          { key: "controls", label: "Controls" },
+          { key: "usage", label: "Used by apps" },
+        ]
+      : [
+          { key: "controls", label: "Controls" },
+          { key: "usage", label: "Used by apps" },
+        ];
+
+  // Belt-and-suspenders: if current tab is not in visible list, fall back to "controls"
+  const activeTab: DetailTab =
+    visibleTabs.some((t) => t.key === tab) ? tab : "controls";
 
   // Virtual children for physical cards
   const childCards =
