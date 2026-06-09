@@ -84,7 +84,7 @@ export function CardDetailModal({ card, onClose, onSelectCard }: CardDetailModal
       open={true}
       onClose={onClose}
       title={liveCard.label}
-      widthClass="w-[min(560px,calc(100vw-48px))]"
+      widthClass="md:w-[min(560px,calc(100vw-48px))]"
     >
       {/* PERSISTENT HEADER — always visible above tab bar */}
 
@@ -128,12 +128,12 @@ export function CardDetailModal({ card, onClose, onSelectCard }: CardDetailModal
       </div>
 
       {/* TAB BAR — matches PaymentsSection segmented control pattern */}
-      <div className="flex items-center gap-1 border-b border-gray-100 mb-5">
+      <div className="flex items-center gap-1 border-b border-gray-100 mb-5 overflow-x-auto">
         {visibleTabs.map(({ key, label }) => (
           <button
             key={key}
             onClick={() => setTab(key)}
-            className={`text-sm px-3 py-2 -mb-px border-b-2 transition-colors ${
+            className={`text-sm px-3 py-2 -mb-px border-b-2 transition-colors flex-shrink-0 whitespace-nowrap ${
               activeTab === key
                 ? "border-current font-medium"
                 : "border-transparent text-gray-500 hover:text-gray-700"

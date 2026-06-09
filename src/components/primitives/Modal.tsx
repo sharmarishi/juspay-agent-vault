@@ -14,11 +14,11 @@ export function Modal({ open, onClose, title, children, widthClass }: ModalProps
 
   return (
     <div
-      className="fixed inset-0 bg-black/40 flex items-center justify-center z-[60]"
+      className="fixed inset-0 bg-black/40 flex items-stretch justify-stretch md:items-center md:justify-center z-[60]"
       onClick={onClose}
     >
       <div
-        className={`bg-white rounded-2xl shadow-xl ${widthClass ?? "w-[min(520px,calc(100vw-48px))]"} max-h-[calc(100vh-48px)] overflow-y-auto p-6`}
+        className={`bg-white shadow-xl overflow-y-auto p-4 md:p-6 w-full h-full md:h-auto md:rounded-2xl md:max-h-[calc(100vh-48px)] ${widthClass ?? "md:w-[min(520px,calc(100vw-48px))]"}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}

@@ -95,7 +95,7 @@ export function SimulatePaymentModal({ cardId, onClose }: SimulatePaymentModalPr
       open={true}
       onClose={onClose}
       title="Simulate a payment"
-      widthClass="w-[min(440px,calc(100vw-48px))]"
+      widthClass="md:w-[min(440px,calc(100vw-48px))]"
     >
       {step !== "challenge" ? (
         <div className="space-y-4">
