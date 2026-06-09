@@ -19,6 +19,7 @@ export interface NavItem {
   id: string;
   label: string;
   icon: LucideIcon;
+  tag?: string; // subtle badge, e.g. "Demo" — highlights the demo-relevant sections
 }
 
 export const NAV_ITEMS: NavItem[] = [
@@ -26,8 +27,8 @@ export const NAV_ITEMS: NavItem[] = [
   { id: "notifications", label: "Notifications", icon: Bell },
   { id: "personalization", label: "Personalization", icon: UserCircle },
   { id: "apps", label: "Apps", icon: Grid3x3 },
-  { id: "payments", label: "Payments", icon: CreditCard },
-  { id: "shopping", label: "Shopping", icon: ShoppingBag },
+  { id: "payments", label: "Payments", icon: CreditCard, tag: "Demo" },
+  { id: "shopping", label: "Shopping", icon: ShoppingBag, tag: "Demo" },
   { id: "data-controls", label: "Data controls", icon: Database },
   { id: "storage", label: "Storage", icon: HardDrive },
   { id: "security", label: "Security", icon: ShieldCheck },

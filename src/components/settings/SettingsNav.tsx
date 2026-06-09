@@ -27,6 +27,11 @@ export function SettingsNav({ selected, onSelect, open, onClose }: SettingsNavPr
           >
             <Icon size={18} className="flex-shrink-0 text-gray-700" />
             <span>{item.label}</span>
+            {item.tag && (
+              <span className="ml-auto text-[10px] font-medium rounded-full px-1.5 py-0.5 bg-indigo-50 text-indigo-600 border border-indigo-100">
+                {item.tag}
+              </span>
+            )}
           </button>
         );
       })}
