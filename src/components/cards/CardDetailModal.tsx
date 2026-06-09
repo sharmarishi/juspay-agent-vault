@@ -2,6 +2,7 @@ import React from "react";
 import type { Card } from "../../data/types";
 import { Modal } from "../primitives/Modal";
 import { CardVisual } from "./CardVisual";
+import { Toggle } from "../primitives/Toggle";
 import { useVaultStore } from "../../store/useVaultStore";
 
 interface CardDetailModalProps {
@@ -10,6 +11,7 @@ interface CardDetailModalProps {
 }
 
 export function CardDetailModal({ card, onClose }: CardDetailModalProps) {
+  const cards = useVaultStore((s) => s.cards);
   const transactions = useVaultStore((s) => s.transactions);
   const updateCard = useVaultStore((s) => s.updateCard);
   const removeCard = useVaultStore((s) => s.removeCard);
@@ -18,11 +20,13 @@ export function CardDetailModal({ card, onClose }: CardDetailModalProps) {
     return <Modal open={false} onClose={onClose} title="Card">{null}</Modal>;
   }
 
+  const liveCard = cards.find((c) => c.id === card.id) ?? card;
+
   const cardTxns = transactions
-    .filter((t) => t.cardId === card.id)
+    .filter((t) => t.cardId === liveCard.id)
     .sort((a, b) => b.date.localeCompare(a.date));
 
-  const spendPercent = card.limit > 0 ? Math.min(100, (card.spent / card.limit) * 100) : 0;
+  const spendPercent = liveCard.limit > 0 ? Math.min(100, (liveCard.spent / liveCard.limit) * 100) : 0;
 
   const statusColor = {
     completed: { bg: "bg-green-100", text: "text-green-700" },
@@ -34,12 +38,12 @@ export function CardDetailModal({ card, onClose }: CardDetailModalProps) {
     <Modal
       open={true}
       onClose={onClose}
-      title={card.label}
+      title={liveCard.label}
       widthClass="w-[min(560px,calc(100vw-48px))]"
     >
       {/* 1. Large card visual */}
       <div className="mb-5">
-        <CardVisual card={card} />
+        <CardVisual card={liveCard} />
       </div>
 
       {/* 2. Spend-vs-limit indicator */}
@@ -47,18 +51,18 @@ export function CardDetailModal({ card, onClose }: CardDetailModalProps) {
         <div className="flex items-center justify-between mb-1.5">
           <span className="text-sm font-medium text-gray-700">Spent this period</span>
           <span className="text-sm text-gray-600">
-            ${card.spent.toFixed(2)} / ${card.limit.toLocaleString()}
+            ${liveCard.spent.toFixed(2)} / ${liveCard.limit.toLocaleString()}
           </span>
         </div>
         <div className="bg-gray-100 rounded-full h-2 overflow-hidden">
           <div
             className="h-full rounded-full transition-all duration-300"
-            style={{ width: `${spendPercent}%`, backgroundColor: card.color }}
+            style={{ width: `${spendPercent}%`, backgroundColor: liveCard.color }}
           />
         </div>
       </div>
 
-      {/* 3. Settings — READ-ONLY this phase */}
+      {/* 3. Settings — editable */}
       <div className="mb-5 border border-gray-100 rounded-xl overflow-hidden">
         <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-100">
           <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
@@ -66,29 +70,67 @@ export function CardDetailModal({ card, onClose }: CardDetailModalProps) {
           </span>
         </div>
         <div className="divide-y divide-gray-100">
+          {/* Row A: Spending limit (CTRL-01) */}
           <div className="flex items-center justify-between px-4 py-2.5">
             <span className="text-sm text-gray-600">Spending limit</span>
-            <span className="text-sm font-medium text-gray-900">${card.limit.toLocaleString()}</span>
+            <div className="flex items-center gap-1">
+              <span className="text-sm text-gray-500">$</span>
+              <input
+                key={liveCard.id}
+                type="number"
+                min={0}
+                defaultValue={liveCard.limit}
+                onChange={(e) => {
+                  const parsed = parseFloat(e.target.value);
+                  if (isFinite(parsed) && parsed >= 0) {
+                    updateCard(liveCard.id, { limit: parsed });
+                  }
+                }}
+                className="border border-gray-200 rounded-lg px-2 py-1 w-28 text-right text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              />
+            </div>
           </div>
+
+          {/* Row B: MFA threshold (CTRL-02) */}
           <div className="flex items-center justify-between px-4 py-2.5">
-            <span className="text-sm text-gray-600">MFA threshold</span>
-            <span className="text-sm font-medium text-gray-900">${card.mfaThreshold}</span>
+            <div>
+              <span className="text-sm text-gray-600">MFA threshold</span>
+              <p className="text-xs text-gray-400">MFA required above this amount.</p>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="text-sm text-gray-500">$</span>
+              <input
+                key={liveCard.id}
+                type="number"
+                min={0}
+                defaultValue={liveCard.mfaThreshold}
+                onChange={(e) => {
+                  const parsed = parseFloat(e.target.value);
+                  if (isFinite(parsed) && parsed >= 0) {
+                    updateCard(liveCard.id, { mfaThreshold: parsed });
+                  }
+                }}
+                className="border border-gray-200 rounded-lg px-2 py-1 w-28 text-right text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              />
+            </div>
           </div>
+
+          {/* Row C: MFA enforcement (CTRL-03) */}
           <div className="flex items-center justify-between px-4 py-2.5">
             <span className="text-sm text-gray-600">MFA enforcement</span>
-            <span className="text-sm font-medium text-gray-900">
-              {card.mfaEnabled ? "On" : "Off"}
-            </span>
+            <Toggle
+              checked={liveCard.mfaEnabled}
+              onChange={(v) => updateCard(liveCard.id, { mfaEnabled: v })}
+            />
           </div>
+
+          {/* Row D: Status (read-only display) */}
           <div className="flex items-center justify-between px-4 py-2.5">
             <span className="text-sm text-gray-600">Status</span>
             <span className="text-sm font-medium text-gray-900">
-              {card.status === "active" ? "Active" : "Frozen"}
+              {liveCard.status === "active" ? "Active" : "Frozen"}
             </span>
           </div>
-        </div>
-        <div className="px-4 py-2 bg-gray-50 border-t border-gray-100">
-          <span className="text-xs text-gray-400">Editable in a later step.</span>
         </div>
       </div>
 
@@ -135,17 +177,17 @@ export function CardDetailModal({ card, onClose }: CardDetailModalProps) {
       <div className="flex items-center gap-2 pt-1 border-t border-gray-100">
         <button
           onClick={() =>
-            updateCard(card.id, {
-              status: card.status === "active" ? "frozen" : "active",
+            updateCard(liveCard.id, {
+              status: liveCard.status === "active" ? "frozen" : "active",
             })
           }
           className="text-xs border border-gray-300 rounded-full px-3 py-1 text-gray-700 hover:bg-gray-50 transition-colors"
         >
-          {card.status === "frozen" ? "Unfreeze" : "Freeze"}
+          {liveCard.status === "frozen" ? "Unfreeze" : "Freeze"}
         </button>
         <button
           onClick={() => {
-            removeCard(card.id);
+            removeCard(liveCard.id);
             onClose();
           }}
           className="text-xs border border-red-300 rounded-full px-3 py-1 text-red-600 hover:bg-red-50 transition-colors"
