@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-06-09)
 Phase: 04
 Plan: Not started
 Status: Phase complete — ready for verification
-Last activity: 2026-06-09 - Completed quick task 260609-kmf: Juspay logo in PoweredByJuspay branding
+Last activity: 2026-06-09 - Completed quick task 260609-kpv: Tabbed card detail view
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -112,6 +112,7 @@ None yet.
 |---|-------------|------|--------|-----------|
 | 260609-kbu | Virtual card fixes: physical-card parent selector in create popup + cards grid shows physical cards only with virtual-children drill-down | 2026-06-09 | 6036198 | [260609-kbu-fixes-in-virtual-card-feature-1-a-virtua](./quick/260609-kbu-fixes-in-virtual-card-feature-1-a-virtua/) |
 | 260609-kmf | Juspay logo mark added to PoweredByJuspay: relocate asset to src/assets, add vite-env.d.ts, replace accent dot with 16px circular img | 2026-06-09 | f3be5c9 | [260609-kmf-in-the-powered-by-juspay-branding-add-a-](./quick/260609-kmf-in-the-powered-by-juspay-branding-add-a-/) |
+| 260609-kpv | CardDetailModal reorganized into horizontal tabs (Virtual cards / Controls / Used by apps) with persistent header; physical cards get 3 tabs, virtual cards 2 | 2026-06-09 | cdf7de2 | [260609-kpv-in-the-card-detail-view-divide-the-singl](./quick/260609-kpv-in-the-card-detail-view-divide-the-singl/) |
 
 ## Session Continuity
 
