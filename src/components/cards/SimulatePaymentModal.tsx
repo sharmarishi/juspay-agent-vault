@@ -13,7 +13,7 @@ interface SimulatePaymentModalProps {
 
 export function SimulatePaymentModal({ cardId, onClose }: SimulatePaymentModalProps) {
   const cards = useVaultStore((s) => s.cards);
-  const apps = useVaultStore((s) => s.apps);
+  const subagents = useVaultStore((s) => s.subagents);
   const addTransaction = useVaultStore((s) => s.addTransaction);
   const updateCard = useVaultStore((s) => s.updateCard);
 
@@ -21,7 +21,7 @@ export function SimulatePaymentModal({ cardId, onClose }: SimulatePaymentModalPr
 
   const [step, setStep] = useState<"form" | "challenge">("form");
   const [amount, setAmount] = useState<string>("");
-  const [appId, setAppId] = useState<string>(apps[0]?.id ?? "");
+  const [subagentId, setSubagentId] = useState<string>(subagents[0]?.id ?? "");
   const [otp, setOtp] = useState<string>("");
   const [error, setError] = useState<string>("");
 
@@ -35,12 +35,12 @@ export function SimulatePaymentModal({ cardId, onClose }: SimulatePaymentModalPr
 
   function postPayment(amt: number) {
     if (!card) return;
-    const app = apps.find((a) => a.id === appId);
+    const subagent = subagents.find((s) => s.id === subagentId);
     addTransaction({
       id: `txn_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
       cardId: card.id,
-      appId: appId,
-      merchant: app?.name ?? "Unknown",
+      subagentId: subagentId,
+      merchant: `${subagent?.name ?? "Unknown"} purchase`,
       amount: amt,
       date: new Date().toISOString(),
       status: "completed",
@@ -120,19 +120,19 @@ export function SimulatePaymentModal({ cardId, onClose }: SimulatePaymentModalPr
             </div>
           </div>
 
-          {/* App / merchant picker */}
+          {/* Subagent picker */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              App / Merchant
+              Subagent
             </label>
             <select
-              value={appId}
-              onChange={(e) => setAppId(e.target.value)}
+              value={subagentId}
+              onChange={(e) => setSubagentId(e.target.value)}
               className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
             >
-              {apps.map((app) => (
-                <option key={app.id} value={app.id}>
-                  {app.name}
+              {subagents.map((sg) => (
+                <option key={sg.id} value={sg.id}>
+                  {sg.name}
                 </option>
               ))}
             </select>

@@ -11,15 +11,15 @@ const statusColor = {
 export function TransactionsList() {
   const transactions = useVaultStore((s) => s.transactions);
   const cards        = useVaultStore((s) => s.cards);
-  const apps         = useVaultStore((s) => s.apps);
+  const subagents    = useVaultStore((s) => s.subagents);
 
   const [filter, setFilter] = useState<"all" | "subscriptions">("all");
 
   // Resolution helpers
   const cardLabel = (cardId: string) =>
     cards.find((c) => c.id === cardId)?.label ?? "Unknown card";
-  const appName = (appId: string) =>
-    apps.find((a) => a.id === appId)?.name ?? "";
+  const subagentName = (subagentId: string) =>
+    subagents.find((s) => s.id === subagentId)?.name ?? "";
 
   // Build sorted + filtered list (TXN-02: newest first across all cards)
   const sorted  = [...transactions].sort((a, b) => b.date.localeCompare(a.date));
@@ -66,7 +66,7 @@ export function TransactionsList() {
               key={t.id}
               className="flex items-start justify-between px-4 py-2.5 gap-2"
             >
-              {/* Left: merchant + subscription pill + app/card/date line */}
+              {/* Left: merchant + subagent pill + subscription pill + card/date line */}
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5 flex-wrap">
                   <span className="text-sm text-gray-900 truncate">{t.merchant}</span>
@@ -75,9 +75,20 @@ export function TransactionsList() {
                       Subscription
                     </span>
                   )}
+                  {subagentName(t.subagentId) && (
+                    <span
+                      className="text-[10px] rounded-full px-2 py-0.5 font-medium shrink-0"
+                      style={{
+                        color: JUSPAY_ACCENT,
+                        backgroundColor: JUSPAY_ACCENT + "14",
+                      }}
+                    >
+                      {subagentName(t.subagentId)}
+                    </span>
+                  )}
                 </div>
                 <p className="text-xs text-gray-400 mt-0.5">
-                  {[appName(t.appId), cardLabel(t.cardId), t.date]
+                  {[cardLabel(t.cardId), t.date]
                     .filter(Boolean)
                     .join(" · ")}
                 </p>
