@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-06-09)
 Phase: 04
 Plan: Not started
 Status: Phase complete — ready for verification
-Last activity: 2026-06-09 - Completed quick task 260609-mho: Removed icon picker from Create Token
+Last activity: 2026-06-09 - Completed quick task 260609-mkx: Payments subtitle copy update
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -120,6 +120,7 @@ None yet.
 | 260609-mcd | Fixed duplicate "Payments" header — removed redundant h2 in PaymentsSection (settings shell already renders the section title as h1) | 2026-06-09 | 39b6ad8 | [260609-mcd-remove-duplicate-payments-header-in-paym](./quick/260609-mcd-remove-duplicate-payments-header-in-paym/) |
 | 260609-mfs | Add Card mode tabs renamed + reordered: Custom token→Create Token, From template→Token Templates, now ordered Card / Create Token / Token Templates | 2026-06-09 | 9db86d2 | [260609-mfs-add-card-mode-switcher-rename-custom-tok](./quick/260609-mfs-add-card-mode-switcher-rename-custom-tok/) |
 | 260609-mho | Removed Icon picker from Create Token form; tokens use fixed DEFAULT_TOKEN_ICON (Sparkles), Card color now full-width | 2026-06-09 | 0a395c7 | [260609-mho-remove-the-icon-picker-from-the-create-t](./quick/260609-mho-remove-the-icon-picker-from-the-create-t/) |
+| 260609-mkx | Payments subtitle copy updated: "Manage cards your ChatGPT apps use." → "...ChatGPT Sub Agents use." | 2026-06-09 | 43dba79 | [260609-mkx-change-payments-subtitle-copy-to-manage-](./quick/260609-mkx-change-payments-subtitle-copy-to-manage-/) |
 
 ## Session Continuity
 
