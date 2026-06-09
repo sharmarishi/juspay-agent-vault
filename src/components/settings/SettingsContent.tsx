@@ -23,7 +23,7 @@ export function SettingsContent({ selected }: SettingsContentProps) {
   }
 
   return (
-    <div className="flex flex-col flex-1 p-8 overflow-y-auto">
+    <div className="flex flex-col flex-1 p-4 md:p-8 overflow-y-auto">
       <h1 className="text-xl font-semibold text-gray-900 mb-6">{title}</h1>
       {renderBody()}
     </div>
