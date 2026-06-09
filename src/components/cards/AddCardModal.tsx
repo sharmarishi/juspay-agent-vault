@@ -15,6 +15,12 @@ type Mode = "physical" | "template" | "custom";
 // Tokens created via the Create Token form use a fixed default icon (icon picker removed).
 const DEFAULT_TOKEN_ICON = "Sparkles";
 
+// Demo sample card — physical form is pre-filled so adding a card is one click.
+const SAMPLE_CARD_NUMBER = "4242 4242 4242 4242";
+const SAMPLE_CARD_EXPIRY = "12/27";
+const SAMPLE_CARD_CVV = "123";
+const SAMPLE_CARD_HOLDER = "Rishi Sharma";
+
 interface AddCardModalProps {
   open: boolean;
   onClose: () => void;
@@ -30,9 +36,10 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
   const [mode, setMode] = useState<Mode>("physical");
 
   // Physical form state
-  const [physNumber, setPhysNumber] = useState("");
-  const [physExpiry, setPhysExpiry] = useState("");
-  const [physHolder, setPhysHolder] = useState("");
+  const [physNumber, setPhysNumber] = useState(SAMPLE_CARD_NUMBER);
+  const [physExpiry, setPhysExpiry] = useState(SAMPLE_CARD_EXPIRY);
+  const [physCvv, setPhysCvv] = useState(SAMPLE_CARD_CVV);
+  const [physHolder, setPhysHolder] = useState(SAMPLE_CARD_HOLDER);
 
   // Template mode state
   const [selectedTemplateIndex, setSelectedTemplateIndex] = useState<
@@ -58,9 +65,10 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
 
   function resetForm() {
     setMode("physical");
-    setPhysNumber("");
-    setPhysExpiry("");
-    setPhysHolder("");
+    setPhysNumber(SAMPLE_CARD_NUMBER);
+    setPhysExpiry(SAMPLE_CARD_EXPIRY);
+    setPhysCvv(SAMPLE_CARD_CVV);
+    setPhysHolder(SAMPLE_CARD_HOLDER);
     setSelectedTemplateIndex(null);
     setCustomLabel("");
     setCustomLimit("200");
@@ -254,16 +262,31 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
 
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">
-                Cardholder name
+                CVV
               </label>
               <input
                 type="text"
+                inputMode="numeric"
                 className={inputCls}
-                placeholder="Full name"
-                value={physHolder}
-                onChange={(e) => setPhysHolder(e.target.value)}
+                placeholder="123"
+                value={physCvv}
+                maxLength={4}
+                onChange={(e) => setPhysCvv(e.target.value)}
               />
             </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-gray-700 mb-1">
+              Cardholder name
+            </label>
+            <input
+              type="text"
+              className={inputCls}
+              placeholder="Full name"
+              value={physHolder}
+              onChange={(e) => setPhysHolder(e.target.value)}
+            />
           </div>
 
           <p className="text-xs text-gray-400">
