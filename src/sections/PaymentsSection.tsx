@@ -31,14 +31,17 @@ export function PaymentsSection() {
           </p>
         </div>
 
-        {/* Add card button — visible on all tabs */}
-        <button
-          onClick={() => setAddOpen(true)}
-          className="flex-shrink-0 text-sm rounded-full px-4 py-1.5 text-white font-medium hover:opacity-90 transition-opacity"
-          style={{ backgroundColor: JUSPAY_ACCENT }}
-        >
-          + Add card
-        </button>
+        {/* Right: brand mark (top-right) + Add card button — visible on all tabs */}
+        <div className="flex flex-col items-end gap-2 flex-shrink-0">
+          <PoweredByJuspay />
+          <button
+            onClick={() => setAddOpen(true)}
+            className="text-sm rounded-full px-4 py-1.5 text-white font-medium hover:opacity-90 transition-opacity"
+            style={{ backgroundColor: JUSPAY_ACCENT }}
+          >
+            + Add card
+          </button>
+        </div>
       </div>
 
       {/* Tab bar */}
@@ -151,8 +154,6 @@ export function PaymentsSection() {
           </div>
         </>
       )}
-
-      <PoweredByJuspay />
 
       {/* Modals — mounted outside tab switch so they work from Cards tab */}
       <AddCardModal open={addOpen} onClose={() => setAddOpen(false)} />

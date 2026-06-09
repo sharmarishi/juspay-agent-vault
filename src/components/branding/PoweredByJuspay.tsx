@@ -4,7 +4,7 @@ import { JUSPAY_ACCENT, JUSPAY_NAME } from "../../theme/tokens";
 
 export function PoweredByJuspay() {
   return (
-    <div className="flex items-center gap-1.5 mt-6">
+    <div className="flex items-center gap-1.5">
       <span className="text-xs text-gray-400">Powered by</span>
       <span
         className="text-xs font-semibold"
