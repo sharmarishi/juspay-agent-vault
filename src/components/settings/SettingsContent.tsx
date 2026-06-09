@@ -1,4 +1,5 @@
 import React from "react";
+import { Menu } from "lucide-react";
 import { NAV_ITEMS } from "./navItems";
 import { GeneralSection } from "../../sections/GeneralSection";
 import { PaymentsSection } from "../../sections/PaymentsSection";
@@ -6,9 +7,11 @@ import { PlaceholderSection } from "../../sections/PlaceholderSection";
 
 interface SettingsContentProps {
   selected: string;
+  /** Open the mobile nav drawer */
+  onOpenNav: () => void;
 }
 
-export function SettingsContent({ selected }: SettingsContentProps) {
+export function SettingsContent({ selected, onOpenNav }: SettingsContentProps) {
   const activeItem = NAV_ITEMS.find((item) => item.id === selected);
   const title = activeItem ? activeItem.label : "Settings";
 
@@ -24,7 +27,16 @@ export function SettingsContent({ selected }: SettingsContentProps) {
 
   return (
     <div className="flex flex-col flex-1 p-4 md:p-8 overflow-y-auto">
-      <h1 className="text-xl font-semibold text-gray-900 mb-6">{title}</h1>
+      <div className="flex items-center gap-2 mb-6">
+        <button
+          onClick={onOpenNav}
+          aria-label="Open settings menu"
+          className="md:hidden -ml-1 p-1.5 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+        >
+          <Menu size={20} />
+        </button>
+        <h1 className="text-xl font-semibold text-gray-900">{title}</h1>
+      </div>
       {renderBody()}
     </div>
   );
