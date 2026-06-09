@@ -11,6 +11,10 @@ const statusColor = {
 export function DashboardOverview() {
   const cards = useVaultStore((s) => s.cards);
   const transactions = useVaultStore((s) => s.transactions);
+  const subagents = useVaultStore((s) => s.subagents);
+
+  const subagentName = (subagentId: string) =>
+    subagents.find((s) => s.id === subagentId)?.name ?? "";
 
   // --- Derived stats ---
   const totalCards  = cards.length;
@@ -98,6 +102,17 @@ export function DashboardOverview() {
                     {t.isSubscription && (
                       <span className="text-[10px] bg-gray-100 rounded-full px-2 py-0.5 text-gray-500 shrink-0">
                         Subscription
+                      </span>
+                    )}
+                    {subagentName(t.subagentId) && (
+                      <span
+                        className="text-[10px] rounded-full px-2 py-0.5 font-medium shrink-0"
+                        style={{
+                          color: JUSPAY_ACCENT,
+                          backgroundColor: JUSPAY_ACCENT + "14",
+                        }}
+                      >
+                        {subagentName(t.subagentId)}
                       </span>
                     )}
                   </div>
