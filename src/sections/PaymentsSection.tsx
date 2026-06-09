@@ -5,6 +5,7 @@ import { AddCardModal } from "../components/cards/AddCardModal";
 import { CardDetailModal } from "../components/cards/CardDetailModal";
 import { DashboardOverview } from "../components/payments/DashboardOverview";
 import { TransactionsList } from "../components/payments/TransactionsList";
+import { SubagentsList } from "../components/payments/SubagentsList";
 import { useVaultStore } from "../store/useVaultStore";
 import { JUSPAY_ACCENT } from "../theme/tokens";
 import type { Card } from "../data/types";
@@ -18,7 +19,7 @@ export function PaymentsSection() {
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [addOpen, setAddOpen] = useState(false);
   const [detailCard, setDetailCard] = useState<Card | null>(null);
-  const [tab, setTab] = useState<"overview" | "cards" | "transactions">("overview");
+  const [tab, setTab] = useState<"overview" | "cards" | "transactions" | "subagents">("overview");
 
   return (
     <div className="flex flex-col gap-4">
@@ -51,6 +52,7 @@ export function PaymentsSection() {
             { key: "overview",      label: "Overview" },
             { key: "cards",         label: "Cards" },
             { key: "transactions",  label: "Transactions" },
+            { key: "subagents",     label: "Subagents" },
           ] as const
         ).map(({ key, label }) => (
           <button
@@ -76,6 +78,8 @@ export function PaymentsSection() {
       {tab === "overview" && <DashboardOverview />}
 
       {tab === "transactions" && <TransactionsList />}
+
+      {tab === "subagents" && <SubagentsList />}
 
       {tab === "cards" && (
         <>
