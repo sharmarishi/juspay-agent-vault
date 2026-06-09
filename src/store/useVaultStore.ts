@@ -19,10 +19,10 @@ interface VaultStore extends VaultState {
 // Helper: extract a VaultState snapshot from the store's current get()
 // ---------------------------------------------------------------------------
 function snapshot(
-  get: () => Pick<VaultStore, "cards" | "transactions" | "apps">
+  get: () => Pick<VaultStore, "cards" | "transactions" | "subagents">
 ): VaultState {
-  const { cards, transactions, apps } = get();
-  return { cards, transactions, apps };
+  const { cards, transactions, subagents } = get();
+  return { cards, transactions, subagents };
 }
 
 // ---------------------------------------------------------------------------

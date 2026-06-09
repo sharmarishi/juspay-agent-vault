@@ -43,10 +43,11 @@ describe("persistence layer", () => {
     expect(state).toBeDefined();
     expect(Array.isArray(state.cards)).toBe(true);
     expect(Array.isArray(state.transactions)).toBe(true);
-    expect(Array.isArray(state.apps)).toBe(true);
+    expect(Array.isArray(state.subagents)).toBe(true);
     expect(state.cards.length).toBeGreaterThanOrEqual(5);
     expect(state.transactions.length).toBeGreaterThanOrEqual(10);
-    expect(state.apps.length).toBeGreaterThanOrEqual(5);
+    // 6 canonical subagents
+    expect(state.subagents.length).toBeGreaterThanOrEqual(5);
   });
 
   it("loadState returns a deep clone (not the original SEED reference)", async () => {
@@ -142,7 +143,7 @@ describe("persistence layer", () => {
         },
       ],
       transactions: [],
-      apps: [],
+      subagents: [],
     };
     localStorageMock.setItem(STORAGE_KEY, JSON.stringify(orphanState));
     const { loadState } = await import("./persistence");
@@ -187,7 +188,7 @@ describe("persistence layer", () => {
         },
       ],
       transactions: [],
-      apps: [],
+      subagents: [],
     };
     localStorageMock.setItem(
       STORAGE_KEY,
@@ -230,7 +231,7 @@ describe("persistence layer", () => {
         },
       ],
       transactions: [],
-      apps: [],
+      subagents: [],
     };
     localStorageMock.setItem(STORAGE_KEY, JSON.stringify(noPhysicalState));
     const { loadState } = await import("./persistence");
@@ -240,5 +241,144 @@ describe("persistence layer", () => {
     }).not.toThrow();
     const virtualCard = loaded?.cards[0];
     expect(virtualCard?.parentCardId).toBeUndefined();
+  });
+
+  // ── New v2 migration tests ───────────────────────────────────────────────────
+
+  it("migration: legacy appId transaction gets mapped subagentId and appId removed", async () => {
+    const v1State = {
+      schemaVersion: 1,
+      cards: [
+        {
+          id: "card_physical_01",
+          type: "physical",
+          useCase: "general",
+          label: "Personal",
+          maskedNumber: "•••• 4821",
+          status: "active",
+          limit: 5000,
+          spent: 0,
+          mfaThreshold: 200,
+          mfaEnabled: true,
+          color: "#1a1a2e",
+          icon: "CreditCard",
+        },
+      ],
+      transactions: [
+        {
+          id: "txn_legacy_01",
+          cardId: "card_physical_01",
+          appId: "app_instacart",
+          merchant: "Instacart — Safeway",
+          amount: 45.0,
+          date: "2026-06-01",
+          status: "completed",
+          isSubscription: false,
+        },
+      ],
+      apps: [{ id: "app_instacart", name: "Instacart", icon: "ShoppingCart" }],
+    };
+    localStorageMock.setItem(STORAGE_KEY, JSON.stringify(v1State));
+    const { loadState } = await import("./persistence");
+    const loaded = loadState();
+    const txn = loaded.transactions.find((t) => t.id === "txn_legacy_01");
+    expect(txn).toBeDefined();
+    expect(txn?.subagentId).toBe("sub_grocery");
+    // appId should be removed
+    expect((txn as { appId?: string })?.appId).toBeUndefined();
+    // merchant is preserved
+    expect(txn?.merchant).toBe("Instacart — Safeway");
+  });
+
+  it("migration: card without subagentIds gets subagentIds: []", async () => {
+    const v1State = {
+      schemaVersion: 1,
+      cards: [
+        {
+          id: "card_physical_01",
+          type: "physical",
+          useCase: "general",
+          label: "Personal",
+          maskedNumber: "•••• 4821",
+          status: "active",
+          limit: 5000,
+          spent: 0,
+          mfaThreshold: 200,
+          mfaEnabled: true,
+          color: "#1a1a2e",
+          icon: "CreditCard",
+          // NO subagentIds
+        },
+      ],
+      transactions: [],
+      subagents: [],
+    };
+    localStorageMock.setItem(STORAGE_KEY, JSON.stringify(v1State));
+    const { loadState } = await import("./persistence");
+    const loaded = loadState();
+    const card = loaded.cards.find((c) => c.id === "card_physical_01");
+    expect(card).toBeDefined();
+    expect(card?.subagentIds).toEqual([]);
+  });
+
+  it("migration: SEED cards all have subagentIds array", async () => {
+    const { loadState } = await import("./persistence");
+    const state = loadState();
+    for (const card of state.cards) {
+      expect(Array.isArray(card.subagentIds)).toBe(true);
+    }
+  });
+
+  it("migration: SEED transactions all have subagentId + merchant", async () => {
+    const { loadState } = await import("./persistence");
+    const state = loadState();
+    for (const txn of state.transactions) {
+      expect(typeof txn.subagentId).toBe("string");
+      expect(txn.subagentId.length).toBeGreaterThan(0);
+      expect(typeof txn.merchant).toBe("string");
+      expect(txn.merchant.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("migration: legacy apps state gets replaced with canonical SUBAGENTS list", async () => {
+    const v1State = {
+      schemaVersion: 1,
+      cards: [],
+      transactions: [],
+      apps: [{ id: "app_instacart", name: "Instacart", icon: "ShoppingCart" }],
+    };
+    localStorageMock.setItem(STORAGE_KEY, JSON.stringify(v1State));
+    const { loadState } = await import("./persistence");
+    const loaded = loadState();
+    // subagents should be the canonical list (6 categories), not the old apps
+    expect(Array.isArray(loaded.subagents)).toBe(true);
+    expect(loaded.subagents.length).toBeGreaterThanOrEqual(5);
+    // Old apps key should not exist on the result
+    expect((loaded as { apps?: unknown }).apps).toBeUndefined();
+  });
+
+  it("migration: unknown appId gets fallback subagentId sub_shopping", async () => {
+    const v1State = {
+      schemaVersion: 1,
+      cards: [],
+      transactions: [
+        {
+          id: "txn_unknown",
+          cardId: "card_physical_01",
+          appId: "app_unknown_xyz",
+          merchant: "Mystery Store",
+          amount: 10.0,
+          date: "2026-06-01",
+          status: "completed",
+          isSubscription: false,
+        },
+      ],
+      apps: [],
+    };
+    localStorageMock.setItem(STORAGE_KEY, JSON.stringify(v1State));
+    const { loadState } = await import("./persistence");
+    const loaded = loadState();
+    const txn = loaded.transactions.find((t) => t.id === "txn_unknown");
+    expect(txn?.subagentId).toBe("sub_shopping");
   });
 });

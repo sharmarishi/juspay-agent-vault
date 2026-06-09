@@ -1,15 +1,15 @@
-import type { VaultState, Card, Transaction, ConnectedApp } from "./types";
+import type { VaultState, Card, Transaction, Subagent } from "./types";
 
 // ---------------------------------------------------------------------------
-// Connected Apps
+// Subagents — use-case CATEGORIES (not specific vendors)
 // ---------------------------------------------------------------------------
-const APPS: ConnectedApp[] = [
-  { id: "app_instacart", name: "Instacart", icon: "ShoppingCart" },
-  { id: "app_booking", name: "Booking.com", icon: "Hotel" },
-  { id: "app_expedia", name: "Expedia", icon: "Plane" },
-  { id: "app_spotify", name: "Spotify", icon: "Music" },
-  { id: "app_notion", name: "Notion", icon: "FileText" },
-  { id: "app_chatgpt", name: "ChatGPT", icon: "Bot" },
+export const SUBAGENTS: Subagent[] = [
+  { id: "sub_shopping",      name: "Shopping",      icon: "ShoppingBag" },
+  { id: "sub_grocery",       name: "Grocery",       icon: "ShoppingCart" },
+  { id: "sub_gaming",        name: "Gaming",        icon: "Gamepad2" },
+  { id: "sub_saas",          name: "SaaS",          icon: "Code2" },
+  { id: "sub_travel",        name: "Travel",        icon: "Plane" },
+  { id: "sub_entertainment", name: "Entertainment", icon: "Tv2" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -32,6 +32,7 @@ const CARDS: Card[] = [
     icon: "CreditCard",
     holder: "Rishi Sharma",
     expiry: "09/27",
+    subagentIds: [],
   },
 
   // Virtual — Groceries
@@ -49,6 +50,7 @@ const CARDS: Card[] = [
     color: "#16a34a",
     icon: "ShoppingCart",
     parentCardId: "card_physical_01",
+    subagentIds: [],
   },
 
   // Virtual — SaaS
@@ -66,6 +68,7 @@ const CARDS: Card[] = [
     color: "#7c3aed",
     icon: "Code2",
     parentCardId: "card_physical_01",
+    subagentIds: [],
   },
 
   // Virtual — Travel (frozen)
@@ -83,6 +86,7 @@ const CARDS: Card[] = [
     color: "#0369a1",
     icon: "Plane",
     parentCardId: "card_physical_01",
+    subagentIds: [],
   },
 
   // Virtual — Shopping
@@ -100,6 +104,7 @@ const CARDS: Card[] = [
     color: "#ea580c",
     icon: "Package",
     parentCardId: "card_physical_01",
+    subagentIds: [],
   },
 
   // Virtual — Custom (extra card for variety)
@@ -117,11 +122,12 @@ const CARDS: Card[] = [
     color: "#db2777",
     icon: "Tv2",
     parentCardId: "card_physical_01",
+    subagentIds: [],
   },
 ];
 
 // ---------------------------------------------------------------------------
-// Transactions — >= 10, at least 2 isSubscription: true, realistic dates
+// Transactions — 14 txns, each with distinct merchant + subagentId category
 // ---------------------------------------------------------------------------
 
 // Helper: days ago from today
@@ -132,168 +138,168 @@ function daysAgo(n: number): string {
 }
 
 const TRANSACTIONS: Transaction[] = [
-  // Subscription: Spotify on SaaS card (isSubscription: true)
+  // Subscription: Spotify on SaaS card (isSubscription: true) — Entertainment
   {
     id: "txn_001",
     cardId: "card_saas_01",
-    appId: "app_spotify",
-    merchant: "Spotify Premium",
+    subagentId: "sub_entertainment",
+    merchant: "Spotify",
     amount: 11.99,
     date: daysAgo(2),
     status: "completed",
     isSubscription: true,
   },
 
-  // Subscription: Notion on SaaS card (isSubscription: true)
+  // Subscription: Notion on SaaS card (isSubscription: true) — SaaS
   {
     id: "txn_002",
     cardId: "card_saas_01",
-    appId: "app_notion",
-    merchant: "Notion Pro",
+    subagentId: "sub_saas",
+    merchant: "Notion",
     amount: 16.0,
     date: daysAgo(5),
     status: "completed",
     isSubscription: true,
   },
 
-  // Grocery purchase via Instacart
+  // Grocery purchase via Instacart — Grocery
   {
     id: "txn_003",
     cardId: "card_groceries_01",
-    appId: "app_instacart",
-    merchant: "Instacart — Whole Foods",
+    subagentId: "sub_grocery",
+    merchant: "Whole Foods",
     amount: 87.42,
     date: daysAgo(3),
     status: "completed",
     isSubscription: false,
   },
 
-  // Grocery purchase via Instacart again
+  // Grocery purchase — Safeway
   {
     id: "txn_004",
     cardId: "card_groceries_01",
-    appId: "app_instacart",
-    merchant: "Instacart — Trader Joe's",
+    subagentId: "sub_grocery",
+    merchant: "Safeway",
     amount: 56.18,
     date: daysAgo(14),
     status: "completed",
     isSubscription: false,
   },
 
-  // Grocery pending
+  // Grocery pending — Instacart
   {
     id: "txn_005",
     cardId: "card_groceries_01",
-    appId: "app_instacart",
-    merchant: "Instacart — Safeway",
+    subagentId: "sub_grocery",
+    merchant: "Instacart",
     amount: 34.7,
     date: daysAgo(1),
     status: "pending",
     isSubscription: false,
   },
 
-  // Shopping via ChatGPT
+  // Shopping — Amazon
   {
     id: "txn_006",
     cardId: "card_shopping_01",
-    appId: "app_chatgpt",
-    merchant: "Amazon — Electronics",
+    subagentId: "sub_shopping",
+    merchant: "Amazon",
     amount: 249.99,
     date: daysAgo(7),
     status: "completed",
     isSubscription: false,
   },
 
-  // Shopping declined (exceeded MFA threshold without auth)
+  // Shopping declined — Best Buy
   {
     id: "txn_007",
     cardId: "card_shopping_01",
-    appId: "app_chatgpt",
-    merchant: "eBay — Vintage Camera",
+    subagentId: "sub_shopping",
+    merchant: "Best Buy",
     amount: 180.0,
     date: daysAgo(10),
     status: "declined",
     isSubscription: false,
   },
 
-  // Physical card — restaurant
+  // Physical card — Travel (Booking.com)
   {
     id: "txn_008",
     cardId: "card_physical_01",
-    appId: "app_chatgpt",
-    merchant: "Nobu Restaurant",
+    subagentId: "sub_travel",
+    merchant: "Booking.com",
     amount: 320.0,
     date: daysAgo(6),
     status: "completed",
     isSubscription: false,
   },
 
-  // Physical card — pharmacy
+  // Physical card — Travel (Expedia)
   {
     id: "txn_009",
     cardId: "card_physical_01",
-    appId: "app_chatgpt",
-    merchant: "CVS Pharmacy",
-    amount: 42.15,
+    subagentId: "sub_travel",
+    merchant: "Expedia",
+    amount: 420.0,
     date: daysAgo(20),
     status: "completed",
     isSubscription: false,
   },
 
-  // Physical card — gas station
+  // Physical card — Shopping (Amazon)
   {
     id: "txn_010",
     cardId: "card_physical_01",
-    appId: "app_chatgpt",
-    merchant: "Shell Gas Station",
+    subagentId: "sub_shopping",
+    merchant: "Amazon",
     amount: 65.0,
     date: daysAgo(15),
     status: "completed",
     isSubscription: false,
   },
 
-  // Entertainment via ChatGPT
+  // Entertainment — Netflix
   {
     id: "txn_011",
     cardId: "card_custom_01",
-    appId: "app_chatgpt",
-    merchant: "Netflix — Monthly",
+    subagentId: "sub_entertainment",
+    merchant: "Netflix",
     amount: 15.99,
     date: daysAgo(8),
     status: "completed",
     isSubscription: false,
   },
 
-  // Entertainment - pending ticket
+  // Entertainment - Ticketmaster (pending)
   {
     id: "txn_012",
     cardId: "card_custom_01",
-    appId: "app_chatgpt",
-    merchant: "Ticketmaster — Concert",
+    subagentId: "sub_entertainment",
+    merchant: "Ticketmaster",
     amount: 39.99,
     date: daysAgo(2),
     status: "pending",
     isSubscription: false,
   },
 
-  // Physical card — grocery (not via Instacart)
+  // Gaming — Steam
   {
     id: "txn_013",
     cardId: "card_physical_01",
-    appId: "app_chatgpt",
-    merchant: "Costco",
-    amount: 235.0,
+    subagentId: "sub_gaming",
+    merchant: "Steam",
+    amount: 59.99,
     date: daysAgo(30),
     status: "completed",
     isSubscription: false,
   },
 
-  // SaaS — Figma (chatgpt agent)
+  // SaaS — Figma
   {
     id: "txn_014",
     cardId: "card_saas_01",
-    appId: "app_chatgpt",
-    merchant: "Figma Pro",
+    subagentId: "sub_saas",
+    merchant: "Figma",
     amount: 15.0,
     date: daysAgo(12),
     status: "completed",
@@ -307,6 +313,6 @@ const TRANSACTIONS: Transaction[] = [
 export const SEED: VaultState = {
   cards: CARDS,
   transactions: TRANSACTIONS,
-  apps: APPS,
-  schemaVersion: 1,
+  subagents: SUBAGENTS,
+  schemaVersion: 2,
 };

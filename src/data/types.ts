@@ -27,28 +27,29 @@ export interface Card {
   holder?: string; // for physical cards
   expiry?: string; // "MM/YY" for physical cards
   parentCardId?: string; // virtual only — FK to a physical Card.id
+  subagentIds: string[]; // which subagents may access this card (store + display only)
 }
 
 export interface Transaction {
   id: string;
   cardId: string; // FK -> Card.id
-  appId: string; // FK -> ConnectedApp.id (the initiating ChatGPT app/merchant)
-  merchant: string; // display merchant name
+  subagentId: string; // FK -> Subagent.id (the use-case category, e.g. "sub_grocery")
+  merchant: string; // display merchant name (specific vendor, e.g. "Safeway")
   amount: number; // USD
   date: string; // ISO date string
   status: "completed" | "pending" | "declined";
   isSubscription: boolean; // recurring subscription flag
 }
 
-export interface ConnectedApp {
-  id: string; // e.g. "app_instacart"
-  name: string; // "Instacart"
-  icon: string; // lucide icon name or emoji
+export interface Subagent {
+  id: string; // e.g. "sub_grocery"
+  name: string; // "Grocery"
+  icon: string; // lucide icon name
 }
 
 export interface VaultState {
   cards: Card[];
   transactions: Transaction[];
-  apps: ConnectedApp[];
+  subagents: Subagent[];
   schemaVersion?: number;
 }

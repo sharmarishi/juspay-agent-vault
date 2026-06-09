@@ -2,24 +2,100 @@ import type { VaultState } from "../data/types";
 import { SEED } from "../data/seed";
 
 export const STORAGE_KEY = "juspay-agent-vault";
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 /**
- * Migrates a VaultState to the current schema version.
- * - Attaches orphan virtual cards (missing parentCardId) to the first physical card's id.
+ * Maps every legacy seed appId to the canonical subagentId category.
+ * Applied during migration so old persisted transactions resolve correctly.
+ */
+const APP_TO_SUBAGENT: Record<string, string> = {
+  app_instacart: "sub_grocery",
+  app_booking:   "sub_travel",
+  app_expedia:   "sub_travel",
+  app_spotify:   "sub_entertainment",
+  app_notion:    "sub_saas",
+  app_chatgpt:   "sub_shopping",
+};
+
+/**
+ * Migrates a VaultState (potentially legacy shape) to the current schema version.
+ *
+ * V1 → V2 migrations:
+ * - Each transaction with legacy `appId` and no `subagentId` gets
+ *   `subagentId = APP_TO_SUBAGENT[appId] ?? "sub_shopping"` and `appId` key removed.
+ *   Transactions that already have `subagentId` are left untouched (idempotent).
+ * - Each card missing `subagentIds` gets `subagentIds: []`.
+ * - If `state.subagents` is missing/empty, set it to the canonical SUBAGENTS list;
+ *   drop any legacy `apps` key.
+ *
+ * V0/V1 migration (carried forward):
+ * - Orphan virtual cards (missing `parentCardId`) get attached to the first physical card.
  * - If no physical card exists, orphan virtual cards are left as-is without throwing.
- * - Sets schemaVersion to SCHEMA_VERSION.
- * - Idempotent: already-parented virtual cards are left unchanged.
+ *
+ * Sets `schemaVersion = SCHEMA_VERSION` on every call.
+ * Idempotent: calling migrate() multiple times produces the same result.
  */
 export function migrate(state: VaultState): VaultState {
-  const firstPhysical = state.cards.find((c) => c.type === "physical");
-  const migratedCards = state.cards.map((card) => {
-    if (card.type === "virtual" && !card.parentCardId && firstPhysical) {
-      return { ...card, parentCardId: firstPhysical.id };
+  // Work on a loosely-typed copy so we can read legacy fields (appId, apps) without tsc errors
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const s = state as any;
+
+  // ── 1. Orphan-virtual-card migration (v0 → v1, kept idempotent) ────────────
+  const firstPhysical = (s.cards as { id: string; type: string }[]).find(
+    (c) => c.type === "physical"
+  );
+  const migratedCards = (s.cards as {
+    type: string;
+    parentCardId?: string;
+    subagentIds?: string[];
+    [key: string]: unknown;
+  }[]).map((card) => {
+    let result = { ...card };
+    // Attach orphan virtual cards to first physical card
+    if (result.type === "virtual" && !result.parentCardId && firstPhysical) {
+      result = { ...result, parentCardId: firstPhysical.id };
     }
-    return card;
+    // Default subagentIds to [] if missing
+    if (!Array.isArray(result.subagentIds)) {
+      result = { ...result, subagentIds: [] };
+    }
+    return result;
   });
-  return { ...state, cards: migratedCards, schemaVersion: SCHEMA_VERSION };
+
+  // ── 2. Transaction migration: appId → subagentId ──────────────────────────
+  const migratedTransactions = (s.transactions as {
+    subagentId?: string;
+    appId?: string;
+    [key: string]: unknown;
+  }[]).map((txn) => {
+    if (!txn.subagentId && txn.appId) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const result: any = { ...txn };
+      result.subagentId = APP_TO_SUBAGENT[txn.appId as string] ?? "sub_shopping";
+      delete result.appId;
+      return result;
+    }
+    return txn;
+  });
+
+  // ── 3. Subagents migration: use canonical list if missing/empty ────────────
+  let subagents = s.subagents;
+  if (!Array.isArray(subagents) || subagents.length === 0) {
+    subagents = structuredClone(SEED.subagents);
+  }
+
+  // Build the result, drop legacy `apps` key
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const result: any = {
+    ...s,
+    cards: migratedCards,
+    transactions: migratedTransactions,
+    subagents,
+    schemaVersion: SCHEMA_VERSION,
+  };
+  delete result.apps;
+
+  return result as VaultState;
 }
 
 /**
