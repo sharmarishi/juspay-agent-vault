@@ -12,14 +12,8 @@ import { JUSPAY_ACCENT } from "../../theme/tokens";
 
 type Mode = "physical" | "template" | "custom";
 
-const CUSTOM_ICON_OPTIONS = [
-  "Sparkles",
-  "Tv2",
-  "Gift",
-  "Gamepad2",
-  "Coffee",
-  "Heart",
-];
+// Tokens created via the Create Token form use a fixed default icon (icon picker removed).
+const DEFAULT_TOKEN_ICON = "Sparkles";
 
 interface AddCardModalProps {
   open: boolean;
@@ -48,7 +42,6 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
   const [customLabel, setCustomLabel] = useState("");
   const [customLimit, setCustomLimit] = useState("200");
   const [customColor, setCustomColor] = useState(JUSPAY_ACCENT);
-  const [customIcon, setCustomIcon] = useState("Sparkles");
 
   // Shared: parent physical-card selector for virtual creation modes
   const [parentCardId, setParentCardId] = useState<string>("");
@@ -62,7 +55,6 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
     setCustomLabel("");
     setCustomLimit("200");
     setCustomColor(JUSPAY_ACCENT);
-    setCustomIcon("Sparkles");
     setParentCardId("");
   }
 
@@ -140,7 +132,7 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
       mfaThreshold: Math.round(lim * 0.2),
       mfaEnabled: true,
       color: customColor,
-      icon: customIcon,
+      icon: DEFAULT_TOKEN_ICON,
       parentCardId: resolvedParent,
     });
     handleClose();
@@ -361,39 +353,20 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                Card color
-              </label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="color"
-                  className="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer p-0.5"
-                  value={customColor}
-                  onChange={(e) => setCustomColor(e.target.value)}
-                />
-                <span className="text-sm text-gray-500 font-mono">
-                  {customColor}
-                </span>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                Icon
-              </label>
-              <select
-                className={inputCls}
-                value={customIcon}
-                onChange={(e) => setCustomIcon(e.target.value)}
-              >
-                {CUSTOM_ICON_OPTIONS.map((iconName) => (
-                  <option key={iconName} value={iconName}>
-                    {iconName}
-                  </option>
-                ))}
-              </select>
+          <div>
+            <label className="block text-xs font-medium text-gray-700 mb-1">
+              Card color
+            </label>
+            <div className="flex items-center gap-2">
+              <input
+                type="color"
+                className="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer p-0.5"
+                value={customColor}
+                onChange={(e) => setCustomColor(e.target.value)}
+              />
+              <span className="text-sm text-gray-500 font-mono">
+                {customColor}
+              </span>
             </div>
           </div>
 
@@ -403,7 +376,7 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
               className="rounded-lg p-2"
               style={{ backgroundColor: customColor }}
             >
-              <IconRenderer name={customIcon} size={20} className="text-white" />
+              <IconRenderer name={DEFAULT_TOKEN_ICON} size={20} className="text-white" />
             </div>
             <div>
               <p className="text-sm font-semibold text-gray-900">
