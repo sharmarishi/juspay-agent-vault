@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-06-09)
 Phase: 04
 Plan: Not started
 Status: Phase complete — ready for verification
-Last activity: 2026-06-09 - Completed quick task 260609-n9b: Static ChatGPT home background
+Last activity: 2026-06-09 - Completed quick task 260609-nbk: Subagents tab with collapsible transactions
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -125,6 +125,7 @@ None yet.
 | 260609-n5b | Added Subagent-access selector to the physical Card entry flow (was only in Token modes); physical cards now persist selectedSubagentIds | 2026-06-09 | 339c61b | [260609-n5b-add-the-which-subagents-can-access-this-](./quick/260609-n5b-add-the-which-subagents-can-access-this-/) |
 | 260609-n76 | Fixed Overview Recent transactions to show the subagent pill (was merchant-only) matching the Transactions tab | 2026-06-09 | 181d232 | [260609-n76-show-subagent-name-pill-in-overview-rece](./quick/260609-n76-show-subagent-name-pill-in-overview-rece/) |
 | 260609-n9b | Added static ChatGPT home background (ChatGptBackground: logo, sidebar, header, composer) behind the settings modal for demo | 2026-06-09 | 3ae3124 | [260609-n9b-recreate-a-static-chatgpt-homepage-backg](./quick/260609-n9b-recreate-a-static-chatgpt-homepage-backg/) |
+| 260609-nbk | Added Subagents tab to Payments: per-subagent collapsible transaction list showing card/token used, amount, status (SubagentsList) | 2026-06-09 | 6c8ca2f | [260609-nbk-add-a-subagents-tab-to-the-payments-page](./quick/260609-nbk-add-a-subagents-tab-to-the-payments-page/) |
 
 ## Session Continuity
 
