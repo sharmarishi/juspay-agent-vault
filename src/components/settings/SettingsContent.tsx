@@ -3,6 +3,7 @@ import { Menu } from "lucide-react";
 import { NAV_ITEMS } from "./navItems";
 import { GeneralSection } from "../../sections/GeneralSection";
 import { PaymentsSection } from "../../sections/PaymentsSection";
+import { ShoppingSection } from "../../sections/ShoppingSection";
 import { PlaceholderSection } from "../../sections/PlaceholderSection";
 
 interface SettingsContentProps {
@@ -21,6 +22,9 @@ export function SettingsContent({ selected, onOpenNav }: SettingsContentProps) {
     }
     if (selected === "payments") {
       return <PaymentsSection />;
+    }
+    if (selected === "shopping") {
+      return <ShoppingSection />;
     }
     return <PlaceholderSection label={title} />;
   }
