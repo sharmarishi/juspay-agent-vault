@@ -9,10 +9,10 @@ Requirements for the initial frontend-only demo. Each maps to roadmap phases.
 
 ### Shell
 
-- [ ] **SHELL-01**: App opens to a recreated ChatGPT settings modal with left nav and content pane matching ChatGPT's clean light aesthetic
-- [ ] **SHELL-02**: Left nav lists the ChatGPT settings sections (General, Apps, Security, etc.) plus a new "Payments" entry; selecting Payments shows the payments experience
-- [ ] **SHELL-03**: Subtle Juspay co-brand is present ("Powered by Juspay" mark + Juspay accent color on payment cards) without breaking the ChatGPT look
-- [ ] **SHELL-04**: Layout is responsive and usable on desktop widths
+- [x] **SHELL-01**: App opens to a recreated ChatGPT settings modal with left nav and content pane matching ChatGPT's clean light aesthetic
+- [x] **SHELL-02**: Left nav lists the ChatGPT settings sections (General, Apps, Security, etc.) plus a new "Payments" entry; selecting Payments shows the payments experience
+- [x] **SHELL-03**: Subtle Juspay co-brand is present ("Powered by Juspay" mark + Juspay accent color on payment cards) without breaking the ChatGPT look
+- [x] **SHELL-04**: Layout is responsive and usable on desktop widths
 
 ### Cards
 
@@ -93,10 +93,10 @@ Populated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SHELL-01 | Phase 1 | Pending |
-| SHELL-02 | Phase 1 | Pending |
-| SHELL-03 | Phase 1 | Pending |
-| SHELL-04 | Phase 1 | Pending |
+| SHELL-01 | Phase 1 | Complete |
+| SHELL-02 | Phase 1 | Complete |
+| SHELL-03 | Phase 1 | Complete |
+| SHELL-04 | Phase 1 | Complete |
 | DATA-01 | Phase 1 | Pending |
 | DATA-02 | Phase 1 | Pending |
 | DATA-03 | Phase 1 | Pending |

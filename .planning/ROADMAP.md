@@ -31,7 +31,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   5. After editing a limit or toggling a card, refreshing the page preserves the change; a "Reset demo" action restores the original seeded state
 **Plans**: 3 plans
 Plans:
-- [ ] 01-01-PLAN.md — Vite+React+TS+Tailwind scaffold + ChatGPT settings modal shell (nav incl. Payments, primitives, Juspay co-brand)
+- [x] 01-01-PLAN.md — Vite+React+TS+Tailwind scaffold + ChatGPT settings modal shell (nav incl. Payments, primitives, Juspay co-brand)
 - [ ] 01-02-PLAN.md — Seeded demo data layer: types, seed dataset, Zustand store + localStorage persistence
 - [ ] 01-03-PLAN.md — Wire Payments pane to store: seeded card list + Reset demo button (end-to-end)
 **UI hint**: yes
@@ -82,7 +82,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Shell + Data | 0/TBD | Not started | - |
+| 1. Shell + Data | 1/3 | In Progress|  |
 | 2. Card Management | 0/TBD | Not started | - |
 | 3. Controls + Security Simulation | 0/TBD | Not started | - |
 | 4. Transactions, Usage + Dashboard | 0/TBD | Not started | - |
