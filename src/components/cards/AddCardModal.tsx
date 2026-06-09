@@ -169,11 +169,11 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
     <Modal open={open} onClose={handleClose} title="Add a card">
       {/* Mode switcher */}
       <div className="flex gap-2 mb-5 flex-wrap">
-        {(["physical", "template", "custom"] as Mode[]).map((m) => {
+        {(["physical", "custom", "template"] as Mode[]).map((m) => {
           const labels: Record<Mode, string> = {
             physical: "Card",
-            template: "From template",
-            custom: "Custom token",
+            custom: "Create Token",
+            template: "Token Templates",
           };
           return (
             <button
