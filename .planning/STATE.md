@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: verifying
-stopped_at: Completed 04-transactions-usage-dashboard-02-PLAN.md
-last_updated: "2026-06-09T07:58:44.874Z"
+stopped_at: Completed quick task 260609-msi: Introduce Subagents concept replacing Apps
+last_updated: "2026-06-09T16:34:00.000Z"
 last_activity: 2026-06-09
 progress:
   total_phases: 4
@@ -121,9 +121,10 @@ None yet.
 | 260609-mfs | Add Card mode tabs renamed + reordered: Custom token→Create Token, From template→Token Templates, now ordered Card / Create Token / Token Templates | 2026-06-09 | 9db86d2 | [260609-mfs-add-card-mode-switcher-rename-custom-tok](./quick/260609-mfs-add-card-mode-switcher-rename-custom-tok/) |
 | 260609-mho | Removed Icon picker from Create Token form; tokens use fixed DEFAULT_TOKEN_ICON (Sparkles), Card color now full-width | 2026-06-09 | 0a395c7 | [260609-mho-remove-the-icon-picker-from-the-create-t](./quick/260609-mho-remove-the-icon-picker-from-the-create-t/) |
 | 260609-mkx | Payments subtitle copy updated: "Manage cards your ChatGPT apps use." → "...ChatGPT Sub Agents use." | 2026-06-09 | 43dba79 | [260609-mkx-change-payments-subtitle-copy-to-manage-](./quick/260609-mkx-change-payments-subtitle-copy-to-manage-/) |
+| 260609-msi | Full ConnectedApp→Subagent rename: data model, SCHEMA_VERSION 2 migration, Add-Card multi-select, card-detail granted-subagents, merchant+colored-subagent rows, "Used by Subagents" breakdown, Simulate subagent picker | 2026-06-09 | 74a7168 | [260609-msi-introduce-subagents-concept-replacing-ap](./quick/260609-msi-introduce-subagents-concept-replacing-ap/) |
 
 ## Session Continuity
 
-Last session: 2026-06-09T15:31:09.000Z
-Stopped at: Completed quick task 260609-lfl: Full mobile responsive layout
+Last session: 2026-06-09T16:34:00.000Z
+Stopped at: Completed quick task 260609-msi: Introduce Subagents concept replacing Apps
 Resume file: None
