@@ -9,9 +9,11 @@ interface SettingsNavProps {
   open: boolean;
   /** Close the mobile drawer */
   onClose: () => void;
+  /** Close the whole settings modal (desktop X button) */
+  onCloseModal: () => void;
 }
 
-export function SettingsNav({ selected, onSelect, open, onClose }: SettingsNavProps) {
+export function SettingsNav({ selected, onSelect, open, onClose, onCloseModal }: SettingsNavProps) {
   const navList = (
     <nav className="flex flex-col gap-0.5 px-2">
       {NAV_ITEMS.map((item) => {
@@ -46,7 +48,7 @@ export function SettingsNav({ selected, onSelect, open, onClose }: SettingsNavPr
           <button
             className="text-gray-500 hover:text-gray-800 transition-colors p-1 rounded-lg hover:bg-gray-100"
             aria-label="Close settings"
-            onClick={() => {}}
+            onClick={onCloseModal}
           >
             <X size={18} />
           </button>
