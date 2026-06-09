@@ -1,4 +1,5 @@
 import React from "react";
+import juspayLogo from "../../assets/juspay-logo.png";
 import { JUSPAY_ACCENT, JUSPAY_NAME } from "../../theme/tokens";
 
 export function PoweredByJuspay() {
@@ -11,10 +12,7 @@ export function PoweredByJuspay() {
       >
         {JUSPAY_NAME}
       </span>
-      <span
-        className="inline-block w-1.5 h-1.5 rounded-full"
-        style={{ backgroundColor: JUSPAY_ACCENT }}
-      />
+      <img src={juspayLogo} alt="Juspay logo" className="h-4 w-4 rounded-full" />
     </div>
   );
 }
