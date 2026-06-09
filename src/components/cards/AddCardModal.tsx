@@ -32,7 +32,7 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
   const physicalCards = cards.filter((c) => c.type === "physical");
 
   // Mode switcher
-  const [mode, setMode] = useState<Mode>("template");
+  const [mode, setMode] = useState<Mode>("physical");
 
   // Physical form state
   const [physNumber, setPhysNumber] = useState("");
@@ -54,7 +54,7 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
   const [parentCardId, setParentCardId] = useState<string>("");
 
   function resetForm() {
-    setMode("template");
+    setMode("physical");
     setPhysNumber("");
     setPhysExpiry("");
     setPhysHolder("");
