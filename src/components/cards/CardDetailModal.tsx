@@ -6,6 +6,7 @@ import { Toggle } from "../primitives/Toggle";
 import { useVaultStore } from "../../store/useVaultStore";
 import { SimulatePaymentModal } from "./SimulatePaymentModal";
 import { JUSPAY_ACCENT } from "../../theme/tokens";
+import { AppUsageBreakdown } from "../payments/AppUsageBreakdown";
 
 interface CardDetailModalProps {
   card: Card | null;
@@ -15,6 +16,7 @@ interface CardDetailModalProps {
 export function CardDetailModal({ card, onClose }: CardDetailModalProps) {
   const cards = useVaultStore((s) => s.cards);
   const transactions = useVaultStore((s) => s.transactions);
+  const apps = useVaultStore((s) => s.apps);
   const updateCard = useVaultStore((s) => s.updateCard);
   const removeCard = useVaultStore((s) => s.removeCard);
 
@@ -25,6 +27,8 @@ export function CardDetailModal({ card, onClose }: CardDetailModalProps) {
   }
 
   const liveCard = cards.find((c) => c.id === card.id) ?? card;
+
+  const appName = (appId: string) => apps.find((a) => a.id === appId)?.name ?? "";
 
   const cardTxns = transactions
     .filter((t) => t.cardId === liveCard.id)
@@ -149,9 +153,14 @@ export function CardDetailModal({ card, onClose }: CardDetailModalProps) {
         </div>
       </div>
 
-      {/* 4. Recent activity */}
+      {/* 4. App usage breakdown (USAGE-01) */}
       <div className="mb-5">
-        <p className="text-sm font-semibold text-gray-700 mb-2">Recent activity</p>
+        <AppUsageBreakdown cardId={liveCard.id} />
+      </div>
+
+      {/* 5. Transaction history (TXN-01) */}
+      <div className="mb-5">
+        <p className="text-sm font-semibold text-gray-700 mb-2">Transaction history</p>
         {cardTxns.length === 0 ? (
           <p className="text-sm text-gray-400">No activity yet.</p>
         ) : (
@@ -168,7 +177,7 @@ export function CardDetailModal({ card, onClose }: CardDetailModalProps) {
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-gray-400 mt-0.5">{t.date}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{appName(t.appId)} · {t.date}</p>
                 </div>
 
                 {/* Right: amount + status chip */}
@@ -188,7 +197,7 @@ export function CardDetailModal({ card, onClose }: CardDetailModalProps) {
         )}
       </div>
 
-      {/* 5. Actions: freeze/unfreeze + delete */}
+      {/* 6. Actions: freeze/unfreeze + delete */}
       <div className="flex items-center gap-2 pt-1 border-t border-gray-100">
         <button
           onClick={() =>
