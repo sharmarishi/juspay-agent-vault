@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import type { Card } from "../../data/types";
 import { Modal } from "../primitives/Modal";
 import { CardVisual } from "./CardVisual";
+import { IconRenderer } from "./IconRenderer";
 import { Toggle } from "../primitives/Toggle";
 import { useVaultStore } from "../../store/useVaultStore";
 import { SimulatePaymentModal } from "./SimulatePaymentModal";
@@ -11,9 +12,10 @@ import { AppUsageBreakdown } from "../payments/AppUsageBreakdown";
 interface CardDetailModalProps {
   card: Card | null;
   onClose: () => void;
+  onSelectCard?: (card: Card) => void;
 }
 
-export function CardDetailModal({ card, onClose }: CardDetailModalProps) {
+export function CardDetailModal({ card, onClose, onSelectCard }: CardDetailModalProps) {
   const cards = useVaultStore((s) => s.cards);
   const transactions = useVaultStore((s) => s.transactions);
   const apps = useVaultStore((s) => s.apps);
@@ -27,6 +29,18 @@ export function CardDetailModal({ card, onClose }: CardDetailModalProps) {
   }
 
   const liveCard = cards.find((c) => c.id === card.id) ?? card;
+
+  // Virtual children for physical cards
+  const childCards =
+    liveCard.type === "physical"
+      ? cards.filter((c) => c.type === "virtual" && c.parentCardId === liveCard.id)
+      : [];
+
+  // Parent label for virtual cards
+  const parentLabel =
+    liveCard.type === "virtual" && liveCard.parentCardId
+      ? cards.find((c) => c.id === liveCard.parentCardId)?.label ?? null
+      : null;
 
   const appName = (appId: string) => apps.find((a) => a.id === appId)?.name ?? "";
 
@@ -53,6 +67,58 @@ export function CardDetailModal({ card, onClose }: CardDetailModalProps) {
       <div className="mb-5">
         <CardVisual card={liveCard} />
       </div>
+
+      {/* 1a. Parent label for virtual cards */}
+      {parentLabel && (
+        <p className="text-xs text-gray-400 -mt-3 mb-4">
+          Issued under <span className="font-medium text-gray-600">{parentLabel}</span>
+        </p>
+      )}
+
+      {/* 1b. Virtual cards list for physical cards */}
+      {liveCard.type === "physical" && (
+        <div className="mb-5">
+          <p className="text-sm font-semibold text-gray-700 mb-2">Virtual cards</p>
+          {childCards.length === 0 ? (
+            <p className="text-sm text-gray-400">
+              No virtual cards yet — create one with + Add card.
+            </p>
+          ) : (
+            <ul className="divide-y divide-gray-100 border border-gray-100 rounded-xl overflow-hidden">
+              {childCards.map((child) => (
+                <li key={child.id}>
+                  <button
+                    className="w-full flex items-center justify-between px-4 py-2.5 gap-3 hover:bg-gray-50 transition-colors text-left"
+                    onClick={() => onSelectCard?.(child)}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div
+                        className="rounded-lg p-1.5 shrink-0"
+                        style={{ backgroundColor: `${child.color}22` }}
+                      >
+                        <IconRenderer name={child.icon} size={16} />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">{child.label}</p>
+                        <p className="text-xs text-gray-400">{child.maskedNumber}</p>
+                      </div>
+                    </div>
+                    <span
+                      className={`text-[10px] rounded-full px-2 py-0.5 font-medium shrink-0 ${
+                        child.status === "active"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-gray-100 text-gray-500"
+                      }`}
+                    >
+                      {child.status === "active" ? "Active" : "Frozen"}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
 
       {/* 2a. Simulate a payment button — SEC-01 entry point */}
       <div className="mb-4">

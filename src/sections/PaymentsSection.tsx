@@ -76,63 +76,66 @@ export function PaymentsSection() {
 
       {tab === "cards" && (
         <>
-          {/* Card grid */}
-          {cards.length === 0 ? (
-            <p className="text-sm text-gray-400">No cards yet.</p>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {cards.map((card) => (
-                <div key={card.id}>
-                  <CardVisual card={card} onClick={() => setDetailCard(card)} />
+          {/* Card grid — physical cards only; virtual cards accessible via drill-down */}
+          {(() => {
+            const physicalCards = cards.filter((c) => c.type === "physical");
+            return physicalCards.length === 0 ? (
+              <p className="text-sm text-gray-400">No cards yet.</p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {physicalCards.map((card) => (
+                  <div key={card.id}>
+                    <CardVisual card={card} onClick={() => setDetailCard(card)} />
 
-                  {/* Action row */}
-                  <div className="flex items-center gap-2 mt-2">
-                    {confirmDeleteId === card.id ? (
-                      /* Confirm delete prompt */
-                      <>
-                        <span className="text-xs text-gray-600 mr-1">Delete this card?</span>
-                        <button
-                          onClick={() => {
-                            removeCard(card.id);
-                            setConfirmDeleteId(null);
-                          }}
-                          className="text-xs border border-red-300 rounded-full px-3 py-1 text-red-600 hover:bg-red-50 transition-colors"
-                        >
-                          Confirm
-                        </button>
-                        <button
-                          onClick={() => setConfirmDeleteId(null)}
-                          className="text-xs border border-gray-300 rounded-full px-3 py-1 text-gray-600 hover:bg-gray-50 transition-colors"
-                        >
-                          Cancel
-                        </button>
-                      </>
-                    ) : (
-                      /* Normal freeze/delete buttons */
-                      <>
-                        <button
-                          onClick={() =>
-                            updateCard(card.id, {
-                              status: card.status === "active" ? "frozen" : "active",
-                            })
-                          }
-                          className="text-xs border border-gray-300 rounded-full px-3 py-1 text-gray-700 hover:bg-gray-50 transition-colors"
-                        >
-                          {card.status === "frozen" ? "Unfreeze" : "Freeze"}
-                        </button>
-                        <button
-                          onClick={() => setConfirmDeleteId(card.id)}
-                          className="text-xs border border-gray-300 rounded-full px-3 py-1 text-red-600 hover:bg-red-50 transition-colors"
-                        >
-                          Delete
-                        </button>
-                      </>
-                    )}
+                    {/* Action row */}
+                    <div className="flex items-center gap-2 mt-2">
+                      {confirmDeleteId === card.id ? (
+                        /* Confirm delete prompt */
+                        <>
+                          <span className="text-xs text-gray-600 mr-1">Delete this card?</span>
+                          <button
+                            onClick={() => {
+                              removeCard(card.id);
+                              setConfirmDeleteId(null);
+                            }}
+                            className="text-xs border border-red-300 rounded-full px-3 py-1 text-red-600 hover:bg-red-50 transition-colors"
+                          >
+                            Confirm
+                          </button>
+                          <button
+                            onClick={() => setConfirmDeleteId(null)}
+                            className="text-xs border border-gray-300 rounded-full px-3 py-1 text-gray-600 hover:bg-gray-50 transition-colors"
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      ) : (
+                        /* Normal freeze/delete buttons */
+                        <>
+                          <button
+                            onClick={() =>
+                              updateCard(card.id, {
+                                status: card.status === "active" ? "frozen" : "active",
+                              })
+                            }
+                            className="text-xs border border-gray-300 rounded-full px-3 py-1 text-gray-700 hover:bg-gray-50 transition-colors"
+                          >
+                            {card.status === "frozen" ? "Unfreeze" : "Freeze"}
+                          </button>
+                          <button
+                            onClick={() => setConfirmDeleteId(card.id)}
+                            className="text-xs border border-gray-300 rounded-full px-3 py-1 text-red-600 hover:bg-red-50 transition-colors"
+                          >
+                            Delete
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
+                ))}
+              </div>
+            );
+          })()}
 
           {/* Reset demo */}
           <div className="flex flex-col gap-1 pt-2">
@@ -153,7 +156,11 @@ export function PaymentsSection() {
 
       {/* Modals — mounted outside tab switch so they work from Cards tab */}
       <AddCardModal open={addOpen} onClose={() => setAddOpen(false)} />
-      <CardDetailModal card={detailCard} onClose={() => setDetailCard(null)} />
+      <CardDetailModal
+        card={detailCard}
+        onClose={() => setDetailCard(null)}
+        onSelectCard={(c) => setDetailCard(c)}
+      />
     </div>
   );
 }
