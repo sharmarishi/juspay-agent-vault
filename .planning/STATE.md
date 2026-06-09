@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-card-management-01-PLAN.md
-last_updated: "2026-06-09T07:10:56.097Z"
+stopped_at: Completed 02-card-management-02-PLAN.md
+last_updated: "2026-06-09T07:17:14.709Z"
 last_activity: 2026-06-09
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 6
-  completed_plans: 4
+  completed_plans: 5
   percent: 0
 ---
 
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-06-09)
 ## Current Position
 
 Phase: 02 (card-management) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 Status: Ready to execute
 Last activity: 2026-06-09
 
@@ -56,6 +56,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 01-shell-data P02 | 20 | 2 tasks | 8 files |
 | Phase 01-shell-data P03 | 2 | 1 tasks | 1 files |
 | Phase 02-card-management P01 | 8 | 3 tasks | 5 files |
+| Phase 02-card-management P02 | 221 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -80,6 +81,8 @@ Recent decisions affecting current work:
 - [Phase 02-card-management]: Modal z-index z-[60] above SettingsModal z-50 so it renders correctly when opened from within settings
 - [Phase 02-card-management]: IconRenderer double-casts Icons through unknown — lucide-react strict types require iconNode prop making direct cast invalid
 - [Phase 02-card-management]: CardVisual aspectRatio via inline style — Tailwind JIT cannot compose dynamic fractional aspect-ratio values
+- [Phase 02-card-management]: Three-mode modal (physical/template/custom) as segmented pill switcher — all creation paths in one surface
+- [Phase 02-card-management]: Physical mode stores only masked last-4 digits — raw number never persisted, respects mock security constraint
 
 ### Pending Todos
 
@@ -91,6 +94,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-09T07:10:56.095Z
-Stopped at: Completed 02-card-management-01-PLAN.md
+Last session: 2026-06-09T07:17:14.706Z
+Stopped at: Completed 02-card-management-02-PLAN.md
 Resume file: None

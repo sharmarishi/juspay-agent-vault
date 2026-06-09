@@ -16,9 +16,9 @@ Requirements for the initial frontend-only demo. Each maps to roadmap phases.
 
 ### Cards
 
-- [ ] **CARD-01**: User can add a physical card via a mock card-entry form (number, expiry, holder), shown in the card list
-- [ ] **CARD-02**: User can generate a virtual card from a use-case template (Groceries, SaaS, Travel, Shopping), each with preset icon, color, and default limit
-- [ ] **CARD-03**: User can generate a fully custom virtual card (own name, icon/color, limit)
+- [x] **CARD-01**: User can add a physical card via a mock card-entry form (number, expiry, holder), shown in the card list
+- [x] **CARD-02**: User can generate a virtual card from a use-case template (Groceries, SaaS, Travel, Shopping), each with preset icon, color, and default limit
+- [x] **CARD-03**: User can generate a fully custom virtual card (own name, icon/color, limit)
 - [x] **CARD-04**: User can view all cards with a card-style visual showing masked number, use-case label, and status
 - [x] **CARD-05**: User can freeze/unfreeze (toggle active) a card
 - [x] **CARD-06**: User can delete a card
@@ -100,9 +100,9 @@ Populated during roadmap creation.
 | DATA-01 | Phase 1 | Complete |
 | DATA-02 | Phase 1 | Complete |
 | DATA-03 | Phase 1 | Complete |
-| CARD-01 | Phase 2 | Pending |
-| CARD-02 | Phase 2 | Pending |
-| CARD-03 | Phase 2 | Pending |
+| CARD-01 | Phase 2 | Complete |
+| CARD-02 | Phase 2 | Complete |
+| CARD-03 | Phase 2 | Complete |
 | CARD-04 | Phase 2 | Complete |
 | CARD-05 | Phase 2 | Complete |
 | CARD-06 | Phase 2 | Complete |
