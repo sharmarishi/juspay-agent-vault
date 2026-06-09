@@ -1,12 +1,14 @@
-import React from "react";
-import { ChatGptBackground } from "./components/chrome/ChatGptBackground";
+import React, { useState } from "react";
+import { LandingPage } from "./components/chrome/LandingPage";
 import { SettingsModal } from "./components/settings/SettingsModal";
 
 function App() {
+  const [settingsOpen, setSettingsOpen] = useState(false);
+
   return (
     <>
-      <ChatGptBackground />
-      <SettingsModal />
+      <LandingPage onOpenSettings={() => setSettingsOpen(true)} />
+      <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </>
   );
 }
