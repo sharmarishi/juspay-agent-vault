@@ -26,6 +26,7 @@ export interface Card {
   icon: string; // lucide icon name (string) e.g. "ShoppingCart"
   holder?: string; // for physical cards
   expiry?: string; // "MM/YY" for physical cards
+  parentCardId?: string; // virtual only — FK to a physical Card.id
 }
 
 export interface Transaction {
@@ -49,4 +50,5 @@ export interface VaultState {
   cards: Card[];
   transactions: Transaction[];
   apps: ConnectedApp[];
+  schemaVersion?: number;
 }

@@ -48,6 +48,7 @@ const CARDS: Card[] = [
     mfaEnabled: true,
     color: "#16a34a",
     icon: "ShoppingCart",
+    parentCardId: "card_physical_01",
   },
 
   // Virtual — SaaS
@@ -64,6 +65,7 @@ const CARDS: Card[] = [
     mfaEnabled: false,
     color: "#7c3aed",
     icon: "Code2",
+    parentCardId: "card_physical_01",
   },
 
   // Virtual — Travel (frozen)
@@ -80,6 +82,7 @@ const CARDS: Card[] = [
     mfaEnabled: true,
     color: "#0369a1",
     icon: "Plane",
+    parentCardId: "card_physical_01",
   },
 
   // Virtual — Shopping
@@ -96,6 +99,7 @@ const CARDS: Card[] = [
     mfaEnabled: true,
     color: "#ea580c",
     icon: "Package",
+    parentCardId: "card_physical_01",
   },
 
   // Virtual — Custom (extra card for variety)
@@ -112,6 +116,7 @@ const CARDS: Card[] = [
     mfaEnabled: false,
     color: "#db2777",
     icon: "Tv2",
+    parentCardId: "card_physical_01",
   },
 ];
 
@@ -303,4 +308,5 @@ export const SEED: VaultState = {
   cards: CARDS,
   transactions: TRANSACTIONS,
   apps: APPS,
+  schemaVersion: 1,
 };
