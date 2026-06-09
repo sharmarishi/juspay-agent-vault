@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { CheckCircle2, ArrowRight, Send, Sparkles } from "lucide-react";
 import { useVaultStore } from "../store/useVaultStore";
-import { Toggle } from "../components/primitives/Toggle";
 import { IconRenderer } from "../components/cards/IconRenderer";
 import { JUSPAY_ACCENT } from "../theme/tokens";
 
@@ -122,8 +121,6 @@ export function ShoppingSection() {
   const [query, setQuery] = useState("");
   const [variant, setVariant] = useState<ProductVariant | null>(null);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
-  const [limitOn, setLimitOn] = useState(false);
-  const [mfaOn, setMfaOn] = useState(false);
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
 
@@ -141,8 +138,6 @@ export function ShoppingSection() {
     setQuery("");
     setVariant(null);
     setSelectedCardId(null);
-    setLimitOn(false);
-    setMfaOn(false);
     setOtp("");
     setError("");
   }
@@ -266,7 +261,7 @@ export function ShoppingSection() {
             <AgentTurn text="Which card should I use for this purchase?">
               {!selectedCardId && (
                 <div className="flex flex-col gap-2">
-                  {cards.map((card) => (
+                  {cards.slice(0, 2).map((card) => (
                     <button
                       key={card.id}
                       onClick={() => handleSelectCard(card.id)}
@@ -293,38 +288,35 @@ export function ShoppingSection() {
           </UserBubble>
         )}
 
-        {/* Controls */}
+        {/* Controls — the agent runs the checks automatically (shown as ticks) */}
         {stepGte("controls") && selectedCard && (
-          <AgentTurn text="Before I pay, please confirm your security controls:">
+          <AgentTurn text="I ran the security checks on this card before paying:">
             <div className="rounded-xl border border-gray-200 bg-white divide-y divide-gray-100">
-              <div className="flex items-center justify-between px-4 py-3">
+              <div className="flex items-center gap-3 px-4 py-3">
+                <CheckCircle2 size={18} className="text-green-500 shrink-0" />
                 <div>
                   <p className="text-sm font-medium text-gray-900">Spend limit under control</p>
-                  <p className="text-xs text-gray-500 mt-0.5">Keep this card within its spending limit</p>
+                  <p className="text-xs text-gray-500 mt-0.5">Card is within its spending limit</p>
                 </div>
-                <Toggle checked={limitOn} onChange={step === "controls" ? setLimitOn : () => {}} />
               </div>
-              <div className="flex items-center justify-between px-4 py-3">
+              <div className="flex items-center gap-3 px-4 py-3">
+                <CheckCircle2 size={18} className="text-green-500 shrink-0" />
                 <div>
                   <p className="text-sm font-medium text-gray-900">MFA required</p>
-                  <p className="text-xs text-gray-500 mt-0.5">Require a one-time code to approve the payment</p>
+                  <p className="text-xs text-gray-500 mt-0.5">One-time code enforced for this payment</p>
                 </div>
-                <Toggle checked={mfaOn} onChange={step === "controls" ? setMfaOn : () => {}} />
               </div>
             </div>
-            {step === "controls" &&
-              (limitOn && mfaOn ? (
-                <button
-                  onClick={handleProceed}
-                  className="self-start flex items-center gap-1.5 text-sm rounded-full px-5 py-2.5 text-white font-medium hover:opacity-90 transition-opacity"
-                  style={{ backgroundColor: JUSPAY_ACCENT }}
-                >
-                  Proceed to Pay
-                  <ArrowRight size={15} />
-                </button>
-              ) : (
-                <p className="text-xs text-gray-400">Enable both controls to proceed.</p>
-              ))}
+            {step === "controls" && (
+              <button
+                onClick={handleProceed}
+                className="self-start flex items-center gap-1.5 text-sm rounded-full px-5 py-2.5 text-white font-medium hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: JUSPAY_ACCENT }}
+              >
+                Proceed to Pay
+                <ArrowRight size={15} />
+              </button>
+            )}
           </AgentTurn>
         )}
 
