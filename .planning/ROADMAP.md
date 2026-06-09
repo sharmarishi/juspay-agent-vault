@@ -12,7 +12,7 @@ Four phases build the demo from the ground up. Phase 1 establishes the ChatGPT s
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Shell + Data** - ChatGPT settings modal shell, nav, co-brand, layout, seeded data, and localStorage persistence
+- [x] **Phase 1: Shell + Data** - ChatGPT settings modal shell, nav, co-brand, layout, seeded data, and localStorage persistence (completed 2026-06-09)
 - [ ] **Phase 2: Card Management** - Add physical cards, generate virtual cards (templates + custom), card list, card detail, freeze, and delete
 - [ ] **Phase 3: Controls + Security Simulation** - Spending limits, MFA thresholds, MFA toggle, spend-progress indicator, and the full simulate-payment + MFA-challenge flow
 - [ ] **Phase 4: Transactions, Usage + Dashboard** - Transaction histories, subscription representation, app-usage attribution, and the payments overview dashboard
@@ -33,7 +33,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 - [x] 01-01-PLAN.md — Vite+React+TS+Tailwind scaffold + ChatGPT settings modal shell (nav incl. Payments, primitives, Juspay co-brand)
 - [x] 01-02-PLAN.md — Seeded demo data layer: types, seed dataset, Zustand store + localStorage persistence
-- [ ] 01-03-PLAN.md — Wire Payments pane to store: seeded card list + Reset demo button (end-to-end)
+- [x] 01-03-PLAN.md — Wire Payments pane to store: seeded card list + Reset demo button (end-to-end)
 **UI hint**: yes
 
 ### Phase 2: Card Management
@@ -82,7 +82,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Shell + Data | 2/3 | In Progress|  |
+| 1. Shell + Data | 3/3 | Complete   | 2026-06-09 |
 | 2. Card Management | 0/TBD | Not started | - |
 | 3. Controls + Security Simulation | 0/TBD | Not started | - |
 | 4. Transactions, Usage + Dashboard | 0/TBD | Not started | - |
