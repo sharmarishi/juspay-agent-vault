@@ -1,7 +1,7 @@
 import React from "react";
 import type { Card } from "../../data/types";
 import { IconRenderer } from "./IconRenderer";
-import { JUSPAY_NAME } from "../../theme/tokens";
+import visaLogo from "../../assets/visa-logo.png";
 
 interface CardVisualProps {
   card: Card;
@@ -26,7 +26,7 @@ export function CardVisual({ card, onClick, className }: CardVisualProps) {
 
         {/* Card type chip */}
         <span className="text-[10px] uppercase tracking-wide bg-white/20 rounded-full px-2 py-0.5 font-medium">
-          {card.type === "physical" ? "Physical" : "Virtual"}
+          {card.type === "physical" ? "Card" : "Token"}
         </span>
       </div>
 
@@ -49,8 +49,10 @@ export function CardVisual({ card, onClick, className }: CardVisualProps) {
           </span>
         )}
 
-        {/* Juspay mark */}
-        <span className="text-[10px] font-semibold text-white/80">{JUSPAY_NAME}</span>
+        {/* Visa mark */}
+        <span className="bg-white rounded px-1.5 py-1 inline-flex items-center shadow-sm">
+          <img src={visaLogo} alt="Visa" className="h-3 w-auto" />
+        </span>
       </div>
     </div>
   );

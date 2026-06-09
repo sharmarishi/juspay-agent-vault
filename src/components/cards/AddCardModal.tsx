@@ -171,9 +171,9 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
       <div className="flex gap-2 mb-5 flex-wrap">
         {(["physical", "template", "custom"] as Mode[]).map((m) => {
           const labels: Record<Mode, string> = {
-            physical: "Physical card",
+            physical: "Card",
             template: "From template",
-            custom: "Custom virtual",
+            custom: "Custom token",
           };
           return (
             <button
@@ -245,7 +245,7 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
               disabled={!physicalValid}
               onClick={handlePhysicalSubmit}
             >
-              Add physical card
+              Add card
             </button>
           </div>
         </div>
@@ -255,7 +255,7 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
       {mode === "template" && (
         <div className="flex flex-col gap-4">
           <p className="text-sm text-gray-500">
-            Pick a use-case template to generate a virtual card with preset
+            Pick a use-case template to generate a token with preset
             icon, color, and limit.
           </p>
 
@@ -297,11 +297,11 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
           {/* Physical card selector */}
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1">
-              Issued under (physical card)
+              Issued under (card)
             </label>
             {physicalCards.length === 0 ? (
               <p className="text-sm text-red-500 border border-red-200 rounded-lg px-3 py-2 bg-red-50">
-                Add a physical card first before creating a virtual card.
+                Add a card first before creating a token.
               </p>
             ) : (
               <select
@@ -418,11 +418,11 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
           {/* Physical card selector */}
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1">
-              Issued under (physical card)
+              Issued under (card)
             </label>
             {physicalCards.length === 0 ? (
               <p className="text-sm text-red-500 border border-red-200 rounded-lg px-3 py-2 bg-red-50">
-                Add a physical card first before creating a virtual card.
+                Add a card first before creating a token.
               </p>
             ) : (
               <select

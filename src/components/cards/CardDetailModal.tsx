@@ -40,7 +40,7 @@ export function CardDetailModal({ card, onClose, onSelectCard }: CardDetailModal
   const visibleTabs: { key: DetailTab; label: string }[] =
     liveCard.type === "physical"
       ? [
-          { key: "virtual", label: "Virtual cards" },
+          { key: "virtual", label: "Tokens" },
           { key: "controls", label: "Controls" },
           { key: "usage", label: "Used by apps" },
         ]
@@ -150,10 +150,10 @@ export function CardDetailModal({ card, onClose, onSelectCard }: CardDetailModal
       {/* Virtual cards tab (physical cards only) */}
       {activeTab === "virtual" && (
         <div className="mb-5">
-          <p className="text-sm font-semibold text-gray-700 mb-2">Virtual cards</p>
+          <p className="text-sm font-semibold text-gray-700 mb-2">Tokens</p>
           {childCards.length === 0 ? (
             <p className="text-sm text-gray-400">
-              No virtual cards yet — create one with + Add card.
+              No tokens yet — create one with + Add card.
             </p>
           ) : (
             <ul className="divide-y divide-gray-100 border border-gray-100 rounded-xl overflow-hidden">
