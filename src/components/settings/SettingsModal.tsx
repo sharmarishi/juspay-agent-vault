@@ -12,8 +12,8 @@ export function SettingsModal() {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 md:p-6 z-50">
-      <div className="bg-white shadow-xl flex flex-col md:flex-row overflow-hidden rounded-2xl w-full md:w-[min(900px,calc(100vw-48px))] h-full md:h-auto md:min-h-[600px] max-h-full md:max-h-[calc(100vh-48px)]">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-6 md:p-6 z-50">
+      <div className="bg-white shadow-xl flex flex-col md:flex-row overflow-hidden rounded-2xl w-full md:w-[min(900px,calc(100vw-48px))] h-[82vh] md:h-auto md:min-h-[600px] max-h-[82vh] md:max-h-[calc(100vh-48px)]">
         <SettingsNav
           selected={selected}
           onSelect={handleSelect}
