@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { PoweredByJuspay } from "../components/branding/PoweredByJuspay";
 import { CardVisual } from "../components/cards/CardVisual";
 import { AddCardModal } from "../components/cards/AddCardModal";
+import { CardDetailModal } from "../components/cards/CardDetailModal";
 import { useVaultStore } from "../store/useVaultStore";
 import { JUSPAY_ACCENT } from "../theme/tokens";
+import type { Card } from "../data/types";
 
 export function PaymentsSection() {
   const cards = useVaultStore((s) => s.cards);
@@ -13,6 +15,7 @@ export function PaymentsSection() {
 
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [addOpen, setAddOpen] = useState(false);
+  const [detailCard, setDetailCard] = useState<Card | null>(null);
 
   return (
     <div className="flex flex-col gap-4">
@@ -42,7 +45,7 @@ export function PaymentsSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {cards.map((card) => (
             <div key={card.id}>
-              <CardVisual card={card} />
+              <CardVisual card={card} onClick={() => setDetailCard(card)} />
 
               {/* Action row */}
               <div className="flex items-center gap-2 mt-2">
@@ -109,6 +112,7 @@ export function PaymentsSection() {
       <PoweredByJuspay />
 
       <AddCardModal open={addOpen} onClose={() => setAddOpen(false)} />
+      <CardDetailModal card={detailCard} onClose={() => setDetailCard(null)} />
     </div>
   );
 }
