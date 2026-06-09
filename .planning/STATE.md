@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-06-09)
 Phase: 04
 Plan: Not started
 Status: Phase complete — ready for verification
-Last activity: 2026-06-09 - Completed quick task 260609-n5b: Subagent selector in physical Card entry
+Last activity: 2026-06-09 - Completed quick task 260609-n76: Subagent pill in Overview recent transactions
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -123,6 +123,7 @@ None yet.
 | 260609-mkx | Payments subtitle copy updated: "Manage cards your ChatGPT apps use." → "...ChatGPT Sub Agents use." | 2026-06-09 | 43dba79 | [260609-mkx-change-payments-subtitle-copy-to-manage-](./quick/260609-mkx-change-payments-subtitle-copy-to-manage-/) |
 | 260609-msi | Full ConnectedApp→Subagent rename: data model, SCHEMA_VERSION 2 migration, Add-Card multi-select, card-detail granted-subagents, merchant+colored-subagent rows, "Used by Subagents" breakdown, Simulate subagent picker | 2026-06-09 | 74a7168 | [260609-msi-introduce-subagents-concept-replacing-ap](./quick/260609-msi-introduce-subagents-concept-replacing-ap/) |
 | 260609-n5b | Added Subagent-access selector to the physical Card entry flow (was only in Token modes); physical cards now persist selectedSubagentIds | 2026-06-09 | 339c61b | [260609-n5b-add-the-which-subagents-can-access-this-](./quick/260609-n5b-add-the-which-subagents-can-access-this-/) |
+| 260609-n76 | Fixed Overview Recent transactions to show the subagent pill (was merchant-only) matching the Transactions tab | 2026-06-09 | 181d232 | [260609-n76-show-subagent-name-pill-in-overview-rece](./quick/260609-n76-show-subagent-name-pill-in-overview-rece/) |
 
 ## Session Continuity
 
