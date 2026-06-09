@@ -41,9 +41,9 @@ Requirements for the initial frontend-only demo. Each maps to roadmap phases.
 ### Transactions
 
 - [ ] **TXN-01**: User can view transaction history per card (date, app/merchant, amount, status)
-- [ ] **TXN-02**: User can view a combined transaction history across all cards
-- [ ] **TXN-03**: Recurring subscription payments are represented and identifiable as subscriptions
-- [ ] **TXN-04**: Simulated payments append to the relevant transaction histories in real time
+- [x] **TXN-02**: User can view a combined transaction history across all cards
+- [x] **TXN-03**: Recurring subscription payments are represented and identifiable as subscriptions
+- [x] **TXN-04**: Simulated payments append to the relevant transaction histories in real time
 
 ### Usage
 
@@ -52,8 +52,8 @@ Requirements for the initial frontend-only demo. Each maps to roadmap phases.
 
 ### Dashboard
 
-- [ ] **DASH-01**: Payments overview summarizes all cards, total spend vs. limits, and recent transactions
-- [ ] **DASH-02**: Overview surfaces auth/MFA settings status across cards at a glance
+- [x] **DASH-01**: Payments overview summarizes all cards, total spend vs. limits, and recent transactions
+- [x] **DASH-02**: Overview surfaces auth/MFA settings status across cards at a glance
 
 ### Data
 
@@ -116,13 +116,13 @@ Populated during roadmap creation.
 | SEC-03 | Phase 3 | Complete |
 | SEC-04 | Phase 3 | Complete |
 | TXN-01 | Phase 4 | Pending |
-| TXN-02 | Phase 4 | Pending |
-| TXN-03 | Phase 4 | Pending |
-| TXN-04 | Phase 4 | Pending |
+| TXN-02 | Phase 4 | Complete |
+| TXN-03 | Phase 4 | Complete |
+| TXN-04 | Phase 4 | Complete |
 | USAGE-01 | Phase 4 | Pending |
 | USAGE-02 | Phase 4 | Pending |
-| DASH-01 | Phase 4 | Pending |
-| DASH-02 | Phase 4 | Pending |
+| DASH-01 | Phase 4 | Complete |
+| DASH-02 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 30 total
