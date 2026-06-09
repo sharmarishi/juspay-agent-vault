@@ -94,7 +94,7 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
       icon: "CreditCard",
       holder: physHolder,
       expiry: physExpiry,
-      subagentIds: [],
+      subagentIds: selectedSubagentIds,
     });
     handleClose();
   }
@@ -269,6 +269,8 @@ export function AddCardModal({ open, onClose }: AddCardModalProps) {
           <p className="text-xs text-gray-400">
             Only the last 4 digits are stored — this is a mock entry.
           </p>
+
+          <SubagentSelector />
 
           <div className="flex justify-end mt-1">
             <button
