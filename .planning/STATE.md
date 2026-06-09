@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-06-09)
 Phase: 04
 Plan: Not started
 Status: Phase complete — ready for verification
-Last activity: 2026-06-09
+Last activity: 2026-06-09 - Completed quick task 260609-kbu: Virtual card hierarchy fixes
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -105,6 +105,12 @@ None yet.
 ### Blockers/Concerns
 
 None yet.
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260609-kbu | Virtual card fixes: physical-card parent selector in create popup + cards grid shows physical cards only with virtual-children drill-down | 2026-06-09 | 6036198 | [260609-kbu-fixes-in-virtual-card-feature-1-a-virtua](./quick/260609-kbu-fixes-in-virtual-card-feature-1-a-virtua/) |
 
 ## Session Continuity
 
