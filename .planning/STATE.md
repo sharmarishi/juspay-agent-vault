@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-06-09)
 Phase: 04
 Plan: Not started
 Status: Phase complete — ready for verification
-Last activity: 2026-06-09 - Completed quick task 260609-nxd: Shopping demo as a chat experience
+Last activity: 2026-06-09 - Completed quick task 260609-o2h: Shopping chat card cap + auto security checks
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -130,6 +130,7 @@ None yet.
 | 260609-nmy | Made the blurred ChatGPT background more visible on mobile — capped modal to 82vh + p-6 padding (desktop unchanged) | 2026-06-09 | eccb148 | [260609-nmy-make-the-blurred-chatgpt-background-more](./quick/260609-nmy-make-the-blurred-chatgpt-background-more/) |
 | 260609-npa | Added guided Shopping demo section (request → options → card → controls → MFA challenge → confirmation) wired as new "Shopping" nav item after Payments | 2026-06-09 | 957a318 | [260609-npa-add-a-guided-shopping-commerce-demo-sect](./quick/260609-npa-add-a-guided-shopping-commerce-demo-sect/) |
 | 260609-nxd | Recast the Shopping demo as a chat experience (agent/user bubbles + inline option/card/toggle/OTP widgets + composer), reusing the existing flow logic | 2026-06-09 | 30082b9 | [260609-nxd-rewrite-the-shopping-demo-as-a-chat-expe](./quick/260609-nxd-rewrite-the-shopping-demo-as-a-chat-expe/) |
+| 260609-o2h | Shopping chat: card picker capped at 2; replaced MFA/limit toggles with auto green checkmarks (agent ran checks), Proceed to Pay shows automatically | 2026-06-09 | e48525f | [260609-o2h-shopping-chat-cap-card-picker-at-2-repla](./quick/260609-o2h-shopping-chat-cap-card-picker-at-2-repla/) |
 
 ## Session Continuity
 
