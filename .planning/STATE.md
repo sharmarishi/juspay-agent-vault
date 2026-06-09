@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: verifying
-stopped_at: Completed quick task 260609-npa: Add a guided Shopping/commerce demo section
-last_updated: "2026-06-09T11:38:23Z"
+stopped_at: Completed quick task 260609-qx1: Add ChatGPT landing page as default view
+last_updated: "2026-06-09T19:28:00Z"
 last_activity: 2026-06-09
 progress:
   total_phases: 4
@@ -133,6 +133,7 @@ None yet.
 | 260609-o2h | Shopping chat: card picker capped at 2; replaced MFA/limit toggles with auto green checkmarks (agent ran checks), Proceed to Pay shows automatically | 2026-06-09 | e48525f | [260609-o2h-shopping-chat-cap-card-picker-at-2-repla](./quick/260609-o2h-shopping-chat-cap-card-picker-at-2-repla/) |
 | 260609-o5k | Highlighted Payments + Shopping nav items with a subtle indigo "Demo" pill (data-driven NavItem.tag) | 2026-06-09 | 35ff255 | [260609-o5k-highlight-payments-and-shopping-nav-item](./quick/260609-o5k-highlight-payments-and-shopping-nav-item/) |
 | 260609-o88 | Prefilled a sample card (4242…, 12/27, CVV 123, holder) in the Add Card physical form and added a CVV field (form-only) | 2026-06-09 | 6ab7160 | [260609-o88-prefill-a-sample-card-number-expiry-cvv-](./quick/260609-o88-prefill-a-sample-card-number-expiry-cvv-/) |
+| 260609-qx1 | Landing-first ChatGPT home (LandingPage) + controlled closable SettingsModal (open/onClose, backdrop, desktop X, mobile X) | 2026-06-09 | ff1d230 | [260609-qx1-add-a-chatgpt-landing-page-home-as-the-d](./quick/260609-qx1-add-a-chatgpt-landing-page-home-as-the-d/) |
 
 ## Session Continuity
 
