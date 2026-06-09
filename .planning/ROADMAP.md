@@ -29,7 +29,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. A "Powered by Juspay" co-brand mark and Juspay accent color appear on payment cards without breaking the ChatGPT look
   4. Seeded cards, transactions, and app-usage data are visible immediately without any user action
   5. After editing a limit or toggling a card, refreshing the page preserves the change; a "Reset demo" action restores the original seeded state
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 01-01-PLAN.md — Vite+React+TS+Tailwind scaffold + ChatGPT settings modal shell (nav incl. Payments, primitives, Juspay co-brand)
+- [ ] 01-02-PLAN.md — Seeded demo data layer: types, seed dataset, Zustand store + localStorage persistence
+- [ ] 01-03-PLAN.md — Wire Payments pane to store: seeded card list + Reset demo button (end-to-end)
 **UI hint**: yes
 
 ### Phase 2: Card Management
