@@ -22,7 +22,7 @@ Requirements for the initial frontend-only demo. Each maps to roadmap phases.
 - [x] **CARD-04**: User can view all cards with a card-style visual showing masked number, use-case label, and status
 - [x] **CARD-05**: User can freeze/unfreeze (toggle active) a card
 - [x] **CARD-06**: User can delete a card
-- [ ] **CARD-07**: User can open a card detail view showing its settings, limit usage, and recent activity
+- [x] **CARD-07**: User can open a card detail view showing its settings, limit usage, and recent activity
 
 ### Controls
 
@@ -106,7 +106,7 @@ Populated during roadmap creation.
 | CARD-04 | Phase 2 | Complete |
 | CARD-05 | Phase 2 | Complete |
 | CARD-06 | Phase 2 | Complete |
-| CARD-07 | Phase 2 | Pending |
+| CARD-07 | Phase 2 | Complete |
 | CTRL-01 | Phase 3 | Pending |
 | CTRL-02 | Phase 3 | Pending |
 | CTRL-03 | Phase 3 | Pending |

@@ -50,7 +50,7 @@ Plans:
 Plans:
 - [x] 02-01-PLAN.md — Card visuals + grid + freeze/delete: CardVisual, Modal/IconRenderer/cardTemplates primitives, reworked PaymentsSection grid (CARD-04/05/06)
 - [x] 02-02-PLAN.md — Add physical card + generate virtual card flows: AddCardModal (physical form / template / custom) wired into PaymentsSection (CARD-01/02/03)
-- [ ] 02-03-PLAN.md — Card detail view: CardDetailModal with read-only settings, spend-vs-limit bar, recent activity, freeze/delete (CARD-07)
+- [x] 02-03-PLAN.md — Card detail view: CardDetailModal with read-only settings, spend-vs-limit bar, recent activity, freeze/delete (CARD-07)
 **UI hint**: yes
 
 ### Phase 3: Controls + Security Simulation
