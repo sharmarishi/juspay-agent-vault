@@ -79,7 +79,10 @@ Plans:
   3. Simulated payments from Phase 3 appear in the relevant card's history and in the combined history immediately after posting
   4. Each card detail shows which ChatGPT connected apps used it and how much each app spent
   5. The Payments dashboard summarizes all cards, total spend vs. limits, recent transactions, and MFA/auth status across cards at a glance
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 04-01-PLAN.md — Payments IA restructure into Overview/Cards/Transactions tabs + DashboardOverview + combined TransactionsList (DASH-01/02, TXN-02/03/04)
+- [ ] 04-02-PLAN.md — Per-card app usage attribution (AppUsageBreakdown) + full per-card history in CardDetailModal (USAGE-01/02, TXN-01)
 **UI hint**: yes
 
 ## Progress
@@ -92,4 +95,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Shell + Data | 3/3 | Complete   | 2026-06-09 |
 | 2. Card Management | 2/3 | In Progress|  |
 | 3. Controls + Security Simulation | 1/2 | In Progress|  |
-| 4. Transactions, Usage + Dashboard | 0/TBD | Not started | - |
+| 4. Transactions, Usage + Dashboard | 0/2 | Not started | - |
