@@ -134,9 +134,10 @@ None yet.
 | 260609-o5k | Highlighted Payments + Shopping nav items with a subtle indigo "Demo" pill (data-driven NavItem.tag) | 2026-06-09 | 35ff255 | [260609-o5k-highlight-payments-and-shopping-nav-item](./quick/260609-o5k-highlight-payments-and-shopping-nav-item/) |
 | 260609-o88 | Prefilled a sample card (4242…, 12/27, CVV 123, holder) in the Add Card physical form and added a CVV field (form-only) | 2026-06-09 | 6ab7160 | [260609-o88-prefill-a-sample-card-number-expiry-cvv-](./quick/260609-o88-prefill-a-sample-card-number-expiry-cvv-/) |
 | 260609-qx1 | Landing-first ChatGPT home (LandingPage) + controlled closable SettingsModal (open/onClose, backdrop, desktop X, mobile X) | 2026-06-09 | ff1d230 | [260609-qx1-add-a-chatgpt-landing-page-home-as-the-d](./quick/260609-qx1-add-a-chatgpt-landing-page-home-as-the-d/) |
+| 260609-rad | Mobile Settings replaced with native-app-style full-screen list→detail (NAV_ITEMS rows + Demo pills + ChevronRight; back/close header on detail); desktop two-pane centered modal unchanged via hidden md:flex gate | 2026-06-09 | e85e6d2 | [260609-rad-unify-mobile-settings-ux-into-a-full-scr](./quick/260609-rad-unify-mobile-settings-ux-into-a-full-scr/) |
 
 ## Session Continuity
 
-Last session: 2026-06-09T11:38:23Z
-Stopped at: Completed quick task 260609-npa: Add a guided Shopping/commerce demo section
+Last session: 2026-06-09T14:13:00Z
+Stopped at: Completed quick task 260609-rad: Unify mobile settings UX into full-screen master-detail
 Resume file: None
