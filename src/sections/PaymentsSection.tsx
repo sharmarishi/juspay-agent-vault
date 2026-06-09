@@ -27,7 +27,7 @@ export function PaymentsSection() {
         <div>
           {/* Title is rendered by the settings shell (SettingsContent h1) — only the subtitle here */}
           <p className="text-sm text-gray-500">
-            Manage cards your ChatGPT apps use.
+            Manage cards your ChatGPT Sub Agents use.
           </p>
         </div>
 
