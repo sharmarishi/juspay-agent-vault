@@ -66,7 +66,7 @@ Plans:
 **Plans**: 2 plans
 Plans:
 - [x] 03-01-PLAN.md — Editable controls in CardDetailModal: spending limit, MFA threshold, MFA enforcement toggle wired to updateCard; live spend-vs-limit bar (CTRL-01/02/03/04)
-- [ ] 03-02-PLAN.md — Simulate-payment + MFA challenge: SimulatePaymentModal (amount + app picker, frozen/over-limit rejection, blocking OTP challenge) + button in CardDetailModal (SEC-01/02/03/04)
+- [x] 03-02-PLAN.md — Simulate-payment + MFA challenge: SimulatePaymentModal (amount + app picker, frozen/over-limit rejection, blocking OTP challenge) + button in CardDetailModal (SEC-01/02/03/04)
 **UI hint**: yes
 
 ### Phase 4: Transactions, Usage + Dashboard

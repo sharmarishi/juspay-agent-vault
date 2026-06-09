@@ -33,10 +33,10 @@ Requirements for the initial frontend-only demo. Each maps to roadmap phases.
 
 ### Security
 
-- [ ] **SEC-01**: User can trigger a "Simulate a payment" action from a card (amount + app/merchant)
-- [ ] **SEC-02**: If the simulated amount exceeds the card's MFA threshold (and MFA is on), an OTP/approval challenge modal appears and blocks the transaction
-- [ ] **SEC-03**: Entering the correct simulated OTP/approval clears the challenge and posts the transaction; cancelling aborts it
-- [ ] **SEC-04**: A simulated payment is rejected if it would exceed the card's spending limit or the card is frozen, with a clear reason
+- [x] **SEC-01**: User can trigger a "Simulate a payment" action from a card (amount + app/merchant)
+- [x] **SEC-02**: If the simulated amount exceeds the card's MFA threshold (and MFA is on), an OTP/approval challenge modal appears and blocks the transaction
+- [x] **SEC-03**: Entering the correct simulated OTP/approval clears the challenge and posts the transaction; cancelling aborts it
+- [x] **SEC-04**: A simulated payment is rejected if it would exceed the card's spending limit or the card is frozen, with a clear reason
 
 ### Transactions
 
@@ -111,10 +111,10 @@ Populated during roadmap creation.
 | CTRL-02 | Phase 3 | Complete |
 | CTRL-03 | Phase 3 | Complete |
 | CTRL-04 | Phase 3 | Complete |
-| SEC-01 | Phase 3 | Pending |
-| SEC-02 | Phase 3 | Pending |
-| SEC-03 | Phase 3 | Pending |
-| SEC-04 | Phase 3 | Pending |
+| SEC-01 | Phase 3 | Complete |
+| SEC-02 | Phase 3 | Complete |
+| SEC-03 | Phase 3 | Complete |
+| SEC-04 | Phase 3 | Complete |
 | TXN-01 | Phase 4 | Pending |
 | TXN-02 | Phase 4 | Pending |
 | TXN-03 | Phase 4 | Pending |
